@@ -11,15 +11,18 @@
       background: #E8E4DC;
       display: flex;
       justify-content: center;
-      padding: 40px;
+      padding: 24px;
       min-height: 100vh;
-      min-width: 620px;
+      width: 100%;
       overflow-x: hidden;
+    }
+    @media (max-width: 560px) {
+      html, body { padding: 12px; }
     }
 
     .card {
       width: 540px;
-      min-width: 540px;
+      max-width: 100%;
       background: #fff;
       border-radius: 20px;
       box-shadow: 0 12px 48px rgba(0,0,0,0.15);
