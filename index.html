@@ -115,58 +115,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* 灯箱 */
-  .lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.92);
-    z-index: 999;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    flex-direction: column;
-  }
-  .lightbox.active { display: flex; }
-  .lightbox-frame {
-    width: 100%;
-    max-width: 560px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 80px rgba(0,0,0,0.8);
-    background: #111;
-  }
-  .lightbox iframe {
-    width: 100%;
-    aspect-ratio: 3/4;
-    border: none;
-    display: block;
-    /* 确保 iframe 不超出灯箱容器 */
-    max-width: 560px;
-    max-height: calc(100vh - 120px);
-    /* iOS Safari aspect-ratio 兼容兜底 */
-    object-fit: contain;
-  }
-  .lightbox-close {
-    position: fixed;
-    top: 20px;
-    right: 24px;
-    font-size: 32px;
-    color: #fff;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    background: none;
-    border: none;
-    line-height: 1;
-  }
-  .lightbox-close:hover { opacity: 1; }
-  .lightbox-hint {
-    margin-top: 16px;
-    color: rgba(255,255,255,0.45);
-    font-size: 12px;
-    text-align: center;
-  }
 </style>
 </head>
 <body>
@@ -186,14 +134,7 @@
   <span style="color:#444">有问题找2号位 💪</span>
 </div>
 
-<!-- 灯箱 -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose">×</button>
-  <div class="lightbox-frame">
-    <iframe id="lightboxFrame" src=""></iframe>
-  </div>
-  <div class="lightbox-hint">截图后打开朋友圈发图 · 卡片宽度540px</div>
-</div>
+<!-- 底部提示 -->
 
 <script>
 // 卡片 VOL 金棕色循环
@@ -236,7 +177,7 @@ async function loadCards() {
           <div class="card-date">点击查看 →</div>
         </div>
       `;
-      item.addEventListener("click", () => openLightbox(card.file, card.title));
+      item.href = "./" + card.file;
       grid.appendChild(item);
     });
 
@@ -245,19 +186,6 @@ async function loadCards() {
   }
 }
 
-function openLightbox(filename, title) {
-  document.getElementById("lightboxFrame").src = "./" + filename;
-  document.getElementById("lightbox").classList.add("active");
-}
-
-document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
-document.getElementById("lightbox").addEventListener("click", (e) => {
-  if (e.target === document.getElementById("lightbox")) closeLightbox();
-});
-function closeLightbox() {
-  document.getElementById("lightbox").classList.remove("active");
-  document.getElementById("lightboxFrame").src = "";
-}
 
 loadCards();
 </script>
