@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么啄木鸟不得脑震荡？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #EAFAF1;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    /* 3:4 卡片 宽540px */
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── 顶部栏 ── */
+    .top-bar {
+      background: #1B4F20;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #58D68D;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ── Hero 区 ── */
+    .hero {
+      background: linear-gradient(160deg, #1B4F20 0%, #27AE60 60%, #58D68D 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "?";
+      position: absolute;
+      right: 10px;
+      bottom: -20px;
+      font-size: 160px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      font-style: italic;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #82E0AA;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #82E0AA;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #58D68D;
+      flex-shrink: 0;
+    }
+
+    /* ── 核心发现区 ── */
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #58D68D;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #1B4F20;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #58D68D;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #1B4F20;
+      font-weight: 600;
+    }
+
+    /* ── 分割线 ── */
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #58D68D, transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── 四宫格机制 ── */
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #EAFAF1;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #ABEBC6;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1B4F20;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    /* ── 趣味冷知识 ── */
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #1B4F20, #27AE60);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-label {
+      font-size: 10px;
+      color: #58D68D;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    /* ── 底部 ── */
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #EAFAF1;
+      border-top: 1px solid #ABEBC6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #58D68D;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #58D68D;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.010 · 自然科学</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">🐦 自然</div>
+      <div class="hero-title">为什么<br><em>啄木鸟不得脑震荡？</em></div>
+      <div class="hero-sub">啄木鸟每天敲击1200次，却从不得脑震荡——它的头部藏着一套精密的防震工程</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">1200<span>次</span></div>
+        <div class="fact-caption">每天敲击次数，<br><strong>换人早脑震荡了</strong></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🛡️</span><span class="mech-title">头骨三重防护</span></div>
+        <div class="mech-text">三层骨板夹海绵状骨质，高效吸收冲击力</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🦿</span><span class="mech-title">舌骨环绕减震</span></div>
+        <div class="mech-text">舌骨绕头一圈，像内置安全带拉住大脑</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">💪</span><span class="mech-title">肌肉充当安全带</span></div>
+        <div class="mech-text">敲击前肌肉收紧，将大脑牢牢固定在中位</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">➡️</span><span class="mech-title">直线啄击无旋转</span></div>
+        <div class="mech-text">避免旋转剪切力，是脑损伤的主要原因</div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div>
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">啄木鸟舌头可伸出10厘米，绕过头骨，在高速敲击中充当额外减震垫！</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年4月29日</span>
+      </div>
+      <div class="footer-right">智囊团团 & 2号位</div>
+    </div>
+
+  </div>
+</body>
+</html>
