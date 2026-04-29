@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=540">
+    <title>为什么猫从高处落下总是脚先着地？</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #F0EBE0;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            min-height: 100vh;
+            min-width: 620px;
+        }
+        .card {
+            width: 540px;
+            min-width: 540px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        /* 顶部 */
+        .top-bar {
+            background: #3D2314;
+            color: #fff;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        .top-bar .vol {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 10px;
+        }
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #3D2314 0%, #A0522D 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "?";
+            position: absolute;
+            right: 10px;
+            bottom: -20px;
+            font-size: 160px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.05);
+            line-height: 1;
+            font-style: italic;
+        }
+        .hero-tag {
+            display: inline-block;
+            background: #D4956A;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+        .hero-title {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .hero-subtitle {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+        }
+        /* 核心发现 */
+        .core {
+            background: #FDF5EF;
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #E0C8B0;
+        }
+        .core-num {
+            font-size: 48px;
+            font-weight: 900;
+            color: #D4956A;
+            line-height: 1;
+            min-width: 100px;
+        }
+        .core-num span {
+            font-size: 20px;
+            font-weight: 400;
+        }
+        .core-text {
+            flex: 1;
+        }
+        .core-caption {
+            font-size: 14px;
+            color: #A0522D;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .core-subtitle {
+            font-size: 13px;
+            color: #666;
+        }
+        /* 四宫格 */
+        .section {
+            padding: 24px 30px;
+            border-bottom: 1px solid #E0C8B0;
+        }
+        .section-title {
+            font-size: 13px;
+            color: #D4956A;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: "";
+            width: 3px;
+            height: 14px;
+            background: #D4956A;
+            border-radius: 2px;
+        }
+        .mech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .mech-item {
+            background: #F5EBE0;
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            gap: 10px;
+        }
+        .mech-icon {
+            width: 28px;
+            height: 28px;
+            background: #D4956A;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .mech-content {
+            flex: 1;
+        }
+        .mech-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3D2314;
+            margin-bottom: 4px;
+        }
+        .mech-desc {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+        /* 冷知识 */
+        .fun-fact {
+            padding: 24px 30px;
+            background: #FDF5EF;
+            border-bottom: 1px solid #E0C8B0;
+        }
+        .fun-fact .section-title {
+            margin-bottom: 12px;
+        }
+        .fun-content {
+            background: #fff;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 13px;
+            color: #444;
+            line-height: 1.7;
+            border-left: 3px solid #D4956A;
+        }
+        /* 底部 */
+        .footer {
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="top-bar">
+            <span>每天一个为什么</span>
+            <span class="vol">VOL.07</span>
+        </div>
+        <div class="hero">
+            <div class="hero-tag">#猫</div>
+            <div class="hero-title">为什么猫从高处落下总是脚先着地？</div>
+            <div class="hero-subtitle">这叫"翻正反射"（Righting Reflex），是猫咪与生俱来的生存技能</div>
+        </div>
+        <div class="core">
+            <div class="core-num">0.5<span>秒</span></div>
+            <div class="core-text">
+                <div class="core-caption">翻正反射全程</div>
+                <div class="core-subtitle">四脚朝天扔下也能优雅转身</div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">关键步骤</div>
+            <div class="mech-grid">
+        <div class="mech-item">
+            <div class="mech-icon">①</div>
+            <div class="mech-content">
+                <div class="mech-title">前庭器官</div>
+                <div class="mech-desc">内耳内置陀螺仪，感知朝向</div>
+            </div>
+        </div>
+        <div class="mech-item">
+            <div class="mech-icon">②</div>
+            <div class="mech-content">
+                <div class="mech-title">旋转上半身</div>
+                <div class="mech-desc">头部和前爪先对准地面</div>
+            </div>
+        </div>
+        <div class="mech-item">
+            <div class="mech-icon">③</div>
+            <div class="mech-content">
+                <div class="mech-title">弯曲脊椎</div>
+                <div class="mech-desc">像拧麻花一样利用扭矩</div>
+            </div>
+        </div>
+        <div class="mech-item">
+            <div class="mech-icon">④</div>
+            <div class="mech-content">
+                <div class="mech-title">旋转下半身</div>
+                <div class="mech-desc">前半身稳住后后半身跟进</div>
+            </div>
+        </div></div>
+        </div>
+        <div class="fun-fact">
+            <div class="section-title">💡 冷知识</div>
+            <div class="fun-content">高层建筑综合征：7层以上反而比2-6层受伤更轻</div>
+        </div>
+        <div class="footer">
+            <span>翻正反射 | 前庭器官 | 脊椎灵活性</span>
+            <span>智囊团团 & 2号位</span>
+        </div>
+    </div>
+</body>
+</html>
