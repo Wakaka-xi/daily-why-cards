@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微信笔记功能 - 朋友圈4宫格卡片</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      gap: 30px;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    /* 4宫格容器 */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      width: 750px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .card {
+      width: 369px;
+      height: 369px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==================== 卡片1：封面 ==================== */
+    .card-1 {
+      background: linear-gradient(135deg, #43b89c 0%, #2d9b7e 50%, #1a7a5e 100%);
+    }
+
+    .card-1 .top-label {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+    }
+
+    .card-1 .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .card-1 .icon-wrap {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 38px;
+    }
+
+    .card-1 .main-title {
+      font-size: 38px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .card-1 .sub-title {
+      font-size: 15px;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .card-1 .divider {
+      width: 40px;
+      height: 3px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .card-1 .tag-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .card-1 .tag {
+      background: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.95);
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .card-1 .num-badge {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    /* ==================== 卡片2：核心功能 ==================== */
+    .card-2 {
+      background: linear-gradient(145deg, #fffef5 0%, #fff8e8 100%);
+    }
+
+    .card-2 .card-header {
+      background: linear-gradient(90deg, #f7a800 0%, #f5c842 100%);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-2 .card-header .num {
+      background: white;
+      color: #f7a800;
+      font-size: 13px;
+      font-weight: 800;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-2 .card-header .header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .card-2 .card-body {
+      padding: 16px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: white;
+      padding: 10px 13px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(247,168,0,0.08);
+    }
+
+    .feature-item .f-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feature-item .f-text .f-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 2px;
+    }
+
+    .feature-item .f-text .f-desc {
+      font-size: 11px;
+      color: #888;
+      line-height: 1.4;
+    }
+
+    /* ==================== 卡片3：使用技巧 ==================== */
+    .card-3 {
+      background: linear-gradient(145deg, #f0f4ff 0%, #e8eeff 100%);
+    }
+
+    .card-3 .card-header {
+      background: linear-gradient(90deg, #5b73e8 0%, #7e8ff0 100%);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-3 .card-header .num {
+      background: white;
+      color: #5b73e8;
+      font-size: 13px;
+      font-weight: 800;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-3 .card-header .header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .card-3 .card-body {
+      padding: 14px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 12px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(91,115,232,0.08);
+      border-left: 3px solid #5b73e8;
+    }
+
+    .tip-item .t-num {
+      font-size: 16px;
+      font-weight: 800;
+      color: #5b73e8;
+      flex-shrink: 0;
+      min-width: 22px;
+    }
+
+    .tip-item .t-text .t-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 2px;
+    }
+
+    .tip-item .t-text .t-desc {
+      font-size: 11px;
+      color: #888;
+      line-height: 1.4;
+    }
+
+    /* ==================== 卡片4：应用场景 ==================== */
+    .card-4 {
+      background: linear-gradient(145deg, #fdf4ff 0%, #f8ebff 100%);
+    }
+
+    .card-4 .card-header {
+      background: linear-gradient(90deg, #9c4dcc 0%, #b568e0 100%);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-4 .card-header .num {
+      background: white;
+      color: #9c4dcc;
+      font-size: 13px;
+      font-weight: 800;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-4 .card-header .header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .card-4 .card-body {
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scene-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .scene-item {
+      background: white;
+      border-radius: 10px;
+      padding: 12px 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(156,77,204,0.08);
+      border-top: 3px solid;
+    }
+
+    .scene-item:nth-child(1) { border-color: #9c4dcc; }
+    .scene-item:nth-child(2) { border-color: #e91e8c; }
+
+    .scene-item .s-icon { font-size: 22px; margin-bottom: 5px; }
+    .scene-item .s-title { font-size: 12px; font-weight: 700; color: #333; margin-bottom: 3px; }
+    .scene-item .s-desc { font-size: 10px; color: #999; line-height: 1.4; }
+
+    .card-4 .bottom-tip {
+      background: linear-gradient(90deg, rgba(156,77,204,0.1), rgba(181,104,224,0.1));
+      border-radius: 8px;
+      padding: 9px 12px;
+      text-align: center;
+      font-size: 12px;
+      color: #9c4dcc;
+      font-weight: 500;
+      border: 1px dashed rgba(156,77,204,0.3);
+    }
+
+    /* ==================== 文案区 ==================== */
+    .copytext-box {
+      width: 750px;
+      background: white;
+      border-radius: 12px;
+      padding: 28px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .copytext-box h2 {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #43b89c;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .copytext-content {
+      font-size: 15px;
+      line-height: 2;
+      color: #444;
+      white-space: pre-line;
+      padding: 16px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      border-left: 4px solid #43b89c;
+    }
+
+    .print-tip {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #999;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📱 微信笔记功能 · 朋友圈4宫格卡片</h1>
+
+  <div class="grid-container">
+
+    <!-- 卡片1：封面 -->
+    <div class="card card-1">
+      <div class="top-label">📌 超实用功能</div>
+      <div class="content">
+        <div class="icon-wrap">📒</div>
+        <div class="main-title">微信笔记</div>
+        <div class="sub-title">你一定要知道的隐藏功能</div>
+        <div class="divider"></div>
+        <div class="tag-row">
+          <span class="tag">✍️ 随手记录</span>
+          <span class="tag">🔒 私密安全</span>
+          <span class="tag">☁️ 云端同步</span>
+        </div>
+      </div>
+      <div class="num-badge">01 / 04</div>
+    </div>
+
+    <!-- 卡片2：核心功能 -->
+    <div class="card card-2">
+      <div class="card-header">
+        <div class="num">02</div>
+        <span class="header-title">核心功能一览</span>
+      </div>
+      <div class="card-body">
+        <div class="feature-item">
+          <div class="f-icon">📝</div>
+          <div class="f-text">
+            <div class="f-title">富文本编辑</div>
+            <div class="f-desc">支持文字、图片、语音混合排版，自由创作</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="f-icon">🔖</div>
+          <div class="f-text">
+            <div class="f-title">标签分类管理</div>
+            <div class="f-desc">自定义标签，快速分类整理笔记内容</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="f-icon">🌐</div>
+          <div class="f-text">
+            <div class="f-title">跨设备同步</div>
+            <div class="f-desc">手机、电脑自动同步，随时随地查阅</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="f-icon">📤</div>
+          <div class="f-text">
+            <div class="f-title">一键分享</div>
+            <div class="f-desc">笔记可生成链接或直接分享给好友/群</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片3：使用技巧 -->
+    <div class="card card-3">
+      <div class="card-header">
+        <div class="num">03</div>
+        <span class="header-title">4个实用使用技巧</span>
+      </div>
+      <div class="card-body">
+        <div class="tip-item">
+          <div class="t-num">01</div>
+          <div class="t-text">
+            <div class="t-title">如何打开微信笔记</div>
+            <div class="t-desc">微信首页 →「发现」→「笔记」即可进入</div>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="t-num">02</div>
+          <div class="t-text">
+            <div class="t-title">收藏内容转笔记</div>
+            <div class="t-desc">长按聊天内容 → 收藏 → 可在笔记整理</div>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="t-num">03</div>
+          <div class="t-text">
+            <div class="t-title">插入语音备忘录</div>
+            <div class="t-desc">编辑笔记时点击「+」→ 插入实时语音记录</div>
+          </div>
+        </div>
+        <div class="tip-item">
+          <div class="t-num">04</div>
+          <div class="t-text">
+            <div class="t-title">私密锁定笔记</div>
+            <div class="t-desc">重要笔记可设置「仅自己可见」保护隐私</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片4：应用场景 -->
+    <div class="card card-4">
+      <div class="card-header">
+        <div class="num">04</div>
+        <span class="header-title">这些场景超好用！</span>
+      </div>
+      <div class="card-body">
+        <div class="scene-row">
+          <div class="scene-item">
+            <div class="s-icon">💼</div>
+            <div class="s-title">工作备忘</div>
+            <div class="s-desc">会议要点快速记录，不怕遗忘</div>
+          </div>
+          <div class="scene-item">
+            <div class="s-icon">📚</div>
+            <div class="s-title">学习笔记</div>
+            <div class="s-desc">划重点、做摘录一步到位</div>
+          </div>
+        </div>
+        <div class="scene-row">
+          <div class="scene-item" style="border-color: #00b4a0;">
+            <div class="s-icon">🛒</div>
+            <div class="s-title">购物清单</div>
+            <div class="s-desc">随时添加待买商品，分享给家人</div>
+          </div>
+          <div class="scene-item" style="border-color: #ff7043;">
+            <div class="s-icon">✈️</div>
+            <div class="s-title">旅行规划</div>
+            <div class="s-desc">行程攻略整理，图文并茂收藏</div>
+          </div>
+        </div>
+        <div class="bottom-tip">
+          💡 微信笔记 = 随身携带的私人助理，不要再用备忘录了！
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 朋友圈文案 -->
+  <div class="copytext-box">
+    <h2>📋 朋友圈配套文案（可直接复制）</h2>
+    <div class="copytext-content">
+微信里藏着一个宝藏功能，用过的人都说真香 📒
+
+👉 【微信笔记】你用过吗？
+
+✅ 文字+图片+语音自由混排
+✅ 自定义标签，分类整理超方便
+✅ 手机电脑自动同步，随时查阅
+✅ 一键分享给好友，协作无障碍
+
+开启方式：微信「发现」→「笔记」
+
+用了3年微信，今天才发现这个功能
+以后记录灵感、整理会议、写购物清单
+再也不用切出去开其他APP了 🙌
+
+你最常用微信笔记来记录什么？
+评论区告诉我👇
+
+#微信技巧 #效率神器 #微信笔记 #生产力工具
+    </div>
+  </div>
+
+  <p class="print-tip">💡 提示：在浏览器中按 Ctrl+P 打印/保存为 PDF，或截图4张卡片区域发朋友圈</p>
+
+</body>
+</html>
