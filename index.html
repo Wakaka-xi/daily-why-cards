@@ -138,17 +138,14 @@
   }
   .lightbox iframe {
     width: 100%;
-    /* 移动端 aspect-ratio 不稳定，改用固定高度 */
-    height: 80vh;
-    max-height: 720px;
+    aspect-ratio: 3/4;
     border: none;
     display: block;
-  }
-  @media (min-width: 600px) {
-    .lightbox iframe {
-      height: auto;
-      aspect-ratio: 3/4;
-    }
+    /* 确保 iframe 不超出灯箱容器 */
+    max-width: 560px;
+    max-height: calc(100vh - 120px);
+    /* iOS Safari aspect-ratio 兼容兜底 */
+    object-fit: contain;
   }
   .lightbox-close {
     position: fixed;
