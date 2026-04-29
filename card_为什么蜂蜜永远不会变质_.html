@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么蜂蜜永远不会变质？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #F0EBE0;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    /* 3:4 卡片 宽540px，高度自适应 */
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── 顶部栏 ── */
+    .top-bar {
+      background: #1A1A1A;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #C9954A;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ── Hero 区：C位大标题 ── */
+    .hero {
+      background: linear-gradient(160deg, #2C2416 0%, #5C3D11 60%, #C9954A 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "?";
+      position: absolute;
+      right: 10px;
+      bottom: -20px;
+      font-size: 160px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      font-style: italic;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(201,149,74,0.3);
+      border: 1px solid rgba(201,149,74,0.5);
+      color: #E8B86D;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #E8B86D;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #C9954A;
+      flex-shrink: 0;
+    }
+
+    /* ── 核心发现区 ── */
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #C9954A;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #1A1A1A;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #C9954A;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #1A1A1A;
+      font-weight: 600;
+    }
+
+    /* ── 分割线 ── */
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #C9954A, transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── 四宫格机制 ── */
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #F9F6F1;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #E8D5B0;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2C2416;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    /* ── 趣味冷知识 ── */
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #2C2416, #3D2E0F);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-content {}
+    .fun-label {
+      font-size: 10px;
+      color: #C9954A;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    /* ── 底部 ── */
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #F9F6F1;
+      border-top: 1px solid #E8D5B0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #C9954A;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #C9954A;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.009 · 自然科学</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">🐝 生物 · 食品科学</div>
+      <div class="hero-title">为什么<br><em>蜂蜜永远不会变质？</em></div>
+      <div class="hero-sub">考古学家在埃及金字塔里发现了3000年前的蜂蜜，竟然还能吃</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">3000<span>年</span></div>
+        <div class="fact-caption">金字塔中出土的蜂蜜<br><strong>至今仍可食用</strong></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+      
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">💧</span><span class="mech-title">超低水分</span></div>
+        <div class="mech-text">含水量≤18%，细菌根本无法生存</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🍬</span><span class="mech-title">高糖浓度</span></div>
+        <div class="mech-text">渗透压极高，主动吸走细菌水分</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">⚗️</span><span class="mech-title">天然消毒</span></div>
+        <div class="mech-text">蜜蜂分泌过氧化氢，自带杀菌</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🍋</span><span class="mech-title">酸性屏障</span></div>
+        <div class="mech-text">pH值3-4，微生物无法存活</div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">保存得当的蜂蜜，理论上永久不坏——你的曾孙的曾孙，还能吃这罐蜜</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年4月16日</span>
+      </div>
+      <div class="footer-right">每日一问</div>
+    </div>
+
+  </div>
+</body>
+</html>
