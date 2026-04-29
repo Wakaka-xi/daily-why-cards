@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么有的人特别招蚊子？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #E8E4DC;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── 顶部栏 ── */
+    .top-bar {
+      background: #0D1B14;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #4ADE80;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ── Hero 区 ── */
+    .hero {
+      background: linear-gradient(160deg, #0D1B14 0%, #1A3A2A 50%, #2D5A3D 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "🦟";
+      position: absolute;
+      right: 8px;
+      bottom: -10px;
+      font-size: 120px;
+      opacity: 0.08;
+      line-height: 1;
+    }
+    .hero::after {
+      content: "?";
+      position: absolute;
+      right: 20px;
+      bottom: -25px;
+      font-size: 140px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      font-style: italic;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(74,222,128,0.15);
+      border: 1px solid rgba(74,222,128,0.3);
+      color: #4ADE80;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #4ADE80;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #4ADE80;
+      flex-shrink: 0;
+    }
+
+    /* ── 核心发现区 ── */
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #4ADE80;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #0D1B14;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #4ADE80;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #0D1B14;
+      font-weight: 600;
+    }
+
+    /* ── 分割线 ── */
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #4ADE80, transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── 四宫格机制 ── */
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #F0F7F2;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #4ADE80;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0D1B14;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* ── 趣味冷知识 ── */
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #0D1B14, #1A3A2A);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-label {
+      font-size: 10px;
+      color: #4ADE80;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    /* ── 底部 ── */
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #F0F7F2;
+      border-top: 1px solid #4ADE80;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ADE80;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #4ADE80;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.011 · 人体科学</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">🦟 生物 · 人体科学</div>
+      <div class="hero-title">为什么有的人<br><em>特别招蚊子？</em></div>
+      <div class="hero-sub">不是运气差，是你的身体一直在给蚊子发"定位信号"</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">50<span>米</span></div>
+        <div class="fact-caption">蚊子的CO₂感受器<br>能在<strong>50米外</strong>锁定你</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">💨</span><span class="mech-title">CO₂追踪</span></div>
+        <div class="mech-text">运动后、胖子、孕妇呼出CO₂更多，最容易被锁定</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🌡️</span><span class="mech-title">体温定位</span></div>
+        <div class="mech-text">50厘米内靠体热锁定，体温高、出汗多的人更招</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🦠</span><span class="mech-title">皮肤菌群</span></div>
+        <div class="mech-text">独特菌群产生气味分子，皮肤越"有特色"越招蚊子</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🩸</span><span class="mech-title">血型偏好</span></div>
+        <div class="mech-text">O型血被咬概率是A型血的1.7倍，A型相对最不受欢迎</div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">🧥</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">深色衣服更招蚊子。蚊子靠视觉和对比度定位，黑色、红色在它们眼里最显眼——户外穿浅色，能降低被咬概率</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年4月27日</span>
+      </div>
+      <div class="footer-right">每日一问</div>
+    </div>
+
+  </div>
+</body>
+</html>
