@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日一个为什么 · 卡片库</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0f0f13;
+    color: #e8e8ed;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+  .header {
+    text-align: center;
+    padding: 32px 0 36px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #c9954a, #8a5f1a);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 13px;
+    color: #888;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  @media (min-width: 540px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .card-item {
+    background: #1a1a22;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #2a2a35;
+    text-decoration: none;
+  }
+  .card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    border-color: #c9954a;
+  }
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    background: #111;
+  }
+  .card-info {
+    padding: 10px 12px 12px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-date {
+    font-size: 11px;
+    color: #666;
+  }
+  .empty {
+    grid-column: 1/-1;
+    text-align: center;
+    color: #555;
+    padding: 60px 0;
+    font-size: 14px;
+  }
+  .footer-tip {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.8;
+  }
+  .new-badge {
+    display: inline-block;
+    background: #e05c5c;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+
+  /* 灯箱 */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    flex-direction: column;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox-frame {
+    width: 100%;
+    max-width: 560px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.8);
+    background: #111;
+  }
+  .lightbox iframe {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border: none;
+    display: block;
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    font-size: 32px;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    background: none;
+    border: none;
+    line-height: 1;
+  }
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-hint {
+    margin-top: 16px;
+    color: rgba(255,255,255,0.45);
+    font-size: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">🐝 冷知识</div>
+  <h1>每日一个为什么</h1>
+  <p>点击卡片全屏查看，长按/截图转发朋友圈</p>
+</div>
+
+<div class="grid" id="cardGrid">
+  <div class="empty" id="loading">加载中…</div>
+</div>
+
+<div class="footer-tip">
+  卡片持续更新中 · 每天 20:45 自动生成<br>
+  <span style="color:#444">有问题找2号位 💪</span>
+</div>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">×</button>
+  <div class="lightbox-frame">
+    <iframe id="lightboxFrame" src=""></iframe>
+  </div>
+  <div class="lightbox-hint">截图后打开朋友圈发图 · 卡片宽度540px</div>
+</div>
+
+<script>
+// 卡片 VOL 金棕色循环
+const PALETTE = ["#c9954a","#d4a853","#b8803f","#e0b45f","#a87030"];
+
+async function loadCards() {
+  const grid = document.getElementById("cardGrid");
+  try {
+    const resp = await fetch("./index.json");
+    if (!resp.ok) throw new Error("fetch failed");
+    const cards = await resp.json();
+
+    grid.innerHTML = "";
+    if (!cards || cards.length === 0) {
+      grid.innerHTML = '<div class="empty">暂无卡片，自动化运行后刷新页面</div>';
+      return;
+    }
+
+    cards.forEach((card, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      const isNew = i === cards.length - 1;
+      const volNum = String(i + 1).padStart(3, "0");
+      // 截取标题前12字显示在缩略区
+      const shortTitle = card.title.length > 12
+        ? card.title.slice(0, 12) + "<br>" + card.title.slice(12)
+        : card.title;
+
+      const item = document.createElement("a");
+      item.href = "javascript:void(0)";
+      item.className = "card-item";
+      item.innerHTML = `
+        <div class="card-thumb" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#1a1a22,${color}22);">
+          <div style="text-align:center;padding:16px;">
+            <div style="font-size:10px;color:${color};font-weight:700;letter-spacing:2px;margin-bottom:8px;">VOL.${volNum}</div>
+            <div style="font-size:12px;color:#ccc;line-height:1.6;">${shortTitle}</div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="card-title">${card.title}${isNew ? '<span class="new-badge">NEW</span>' : ''}</div>
+          <div class="card-date">点击查看 →</div>
+        </div>
+      `;
+      item.addEventListener("click", () => openLightbox(card.file, card.title));
+      grid.appendChild(item);
+    });
+
+  } catch (e) {
+    grid.innerHTML = '<div class="empty">加载失败，请检查网络后刷新<br><br><span style="color:#666;font-size:12px;">或直接打开 moments-cards 目录查看</span></div>';
+  }
+}
+
+function openLightbox(filename, title) {
+  document.getElementById("lightboxFrame").src = "./" + filename;
+  document.getElementById("lightbox").classList.add("active");
+}
+
+document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+document.getElementById("lightbox").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("lightbox")) closeLightbox();
+});
+function closeLightbox() {
+  document.getElementById("lightbox").classList.remove("active");
+  document.getElementById("lightboxFrame").src = "";
+}
+
+loadCards();
+</script>
+</body>
+</html>
