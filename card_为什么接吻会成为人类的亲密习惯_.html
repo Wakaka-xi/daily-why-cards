@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么接吻会成为人类的亲密习惯？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #F4ECF7;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+    .card {
+      width: 540px; min-width: 540px;
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden; display: flex; flex-direction: column; position: relative;
+    }
+    .top-bar {
+      background: #4A235A; padding: 16px 28px;
+      display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    }
+    .top-bar .series { font-size: 11px; color: #BB8FCE; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+    .top-bar .issue { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
+    .hero {
+      background: linear-gradient(160deg, #4A235A 0%, #8E44AD 60%, #BB8FCE 100%);
+      padding: 36px 32px 32px; flex-shrink: 0; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: "?"; position: absolute; right: 10px; bottom: -20px;
+      font-size: 160px; font-weight: 900; color: rgba(255,255,255,0.05);
+      line-height: 1; font-style: italic;
+    }
+    .hero-tag {
+      display: inline-block; background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25); color: #D7BDE2;
+      font-size: 11px; letter-spacing: 2px; padding: 4px 12px;
+      border-radius: 20px; margin-bottom: 16px; text-transform: uppercase;
+    }
+    .hero-title { font-size: 30px; font-weight: 800; color: #fff; line-height: 1.35; letter-spacing: -0.5px; }
+    .hero-title em { font-style: normal; color: #D7BDE2; }
+    .hero-sub { margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; display: flex; align-items: center; gap: 8px; }
+    .hero-sub::before { content: ""; display: inline-block; width: 24px; height: 1px; background: #BB8FCE; flex-shrink: 0; }
+    .discovery { padding: 22px 32px 16px; flex-shrink: 0; }
+    .discovery-label { font-size: 10px; color: #BB8FCE; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+    .discovery-fact { display: flex; align-items: baseline; gap: 12px; }
+    .fact-num { font-size: 56px; font-weight: 900; color: #4A235A; line-height: 1; letter-spacing: -2px; }
+    .fact-num span { font-size: 28px; color: #BB8FCE; }
+    .fact-caption { font-size: 14px; color: #555; line-height: 1.6; }
+    .fact-caption strong { color: #4A235A; font-weight: 600; }
+    .divider { margin: 0 32px; height: 1px; background: linear-gradient(90deg, #BB8FCE, transparent); flex-shrink: 0; }
+    .mechanisms { padding: 16px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex-shrink: 0; }
+    .mech-card { background: #F5EEF8; border-radius: 10px; padding: 12px 14px; border-bottom: 2px solid #D2B4DE; }
+    .mech-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .mech-icon { font-size: 18px; }
+    .mech-title { font-size: 13px; font-weight: 700; color: #4A235A; }
+    .mech-text { font-size: 11px; color: #777; line-height: 1.5; }
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #4A235A, #8E44AD);
+      border-radius: 12px; padding: 14px 18px; flex-shrink: 0;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .fun-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .fun-label { font-size: 10px; color: #BB8FCE; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+    .fun-text { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.6; }
+    .footer {
+      margin-top: auto; padding: 14px 32px;
+      background: #F5EEF8; border-top: 1px solid #D2B4DE;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-left { display: flex; align-items: center; gap: 10px; }
+    .footer-dot { width: 6px; height: 6px; border-radius: 50%; background: #BB8FCE; }
+    .footer-date { font-size: 12px; color: #888; }
+    .footer-right { font-size: 11px; color: #BB8FCE; font-weight: 600; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.007 · 社科</span>
+    </div>
+    <div class="hero">
+      <div class="hero-tag">💋 社科</div>
+      <div class="hero-title">为什么<br><em>接吻会成为人类的亲密习惯？</em></div>
+      <div class="hero-sub">人类是极少数会主动用嘴唇表达爱意的物种</div>
+    </div>
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">90<span>%</span></div>
+        <div class="fact-caption">全球约九成文化<br>都存在接吻行为</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="mechanisms">
+<div class="mech-card">
+      <div class="mech-top"><span class="mech-icon">💋</span><span class="mech-title">婴儿本能</span></div>
+      <div class="mech-text">嘴唇接触是最早的进食体验</div>
+    </div><div class="mech-card">
+      <div class="mech-top"><span class="mech-icon">🧠</span><span class="mech-title">母乳记忆</span></div>
+      <div class="mech-text">吸吮乳头唤起安全感与亲密感</div>
+    </div><div class="mech-card">
+      <div class="mech-top"><span class="mech-icon">👃</span><span class="mech-title">嗅觉感知</span></div>
+      <div class="mech-text">犁鼻器感知对方的信息素</div>
+    </div><div class="mech-card">
+      <div class="mech-top"><span class="mech-icon">🧬</span><span class="mech-title">信息素判断</span></div>
+      <div class="mech-text">潜意识判断免疫系统兼容性</div>
+    </div>    </div>
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">黑猩猩互相梳毛，但从不接吻——人类真的很特别</div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年5月1日</span>
+      </div>
+      <div class="footer-right">智囊团团 & 2号位</div>
+    </div>
+  </div>
+</body>
+</html>
