@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么撒哈拉沙漠曾经是一片绿洲？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #F5EDE3;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .top-bar {
+      background: #5D4037;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #D4A574;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+    .hero {
+      background: linear-gradient(160deg, #5D4037 0%, #8D6E63 60%, #D4A574 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "?";
+      position: absolute;
+      right: 10px;
+      bottom: -20px;
+      font-size: 160px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      font-style: italic;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #E8C9A0;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #E8C9A0;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #D4A574;
+      flex-shrink: 0;
+    }
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #D4A574;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #5D4037;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #D4A574;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #5D4037;
+      font-weight: 600;
+    }
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #D4A574, transparent);
+      flex-shrink: 0;
+    }
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #FDF6EE;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #E0CEBD;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #5D4037;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #5D4037, #8D6E63);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-label {
+      font-size: 10px;
+      color: #D4A574;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #FDF6EE;
+      border-top: 1px solid #E0CEBD;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #D4A574;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #D4A574;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.010 · 自然地理</span>
+    </div>
+    <div class="hero">
+      <div class="hero-tag">🌍 地理</div>
+      <div class="hero-title">为什么<br><em>撒哈拉沙漠曾经是一片绿洲</em></div>
+      <div class="hero-sub">考古发现河马骨骼、鳄鱼化石和游泳壁画</div>
+    </div>
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">10000<span>年前</span></div>
+        <div class="fact-caption">撒哈拉曾是<br><strong>湖泊遍布的绿色家园</strong></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="mechanisms">
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🌍</span><span class="mech-title">米兰科维奇循环</span></div>
+        <div class="mech-text">地球轨道倾角和形状的万年级周期变化</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🌧️</span><span class="mech-title">季风带北推</span></div>
+        <div class="mech-text">倾角增大时季风北移，雨水浇灌撒哈拉</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🔥</span><span class="mech-title">植被蒸发恶性循环</span></div>
+        <div class="mech-text">植被退化加速水分蒸发，干旱愈演愈烈</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">↩️</span><span class="mech-title">轨道倾角偏转</span></div>
+        <div class="mech-text">参数再度偏转，季风南撤，绿洲崩塌</div>
+      </div>
+    </div>
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div>
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">按周期推算，撒哈拉大约再过1万年又会重新变绿</div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年5月4日</span>
+      </div>
+      <div class="footer-right">智囊团团 & 2号位</div>
+    </div>
+  </div>
+</body>
+</html>
