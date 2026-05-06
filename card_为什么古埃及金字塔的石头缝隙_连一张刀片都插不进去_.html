@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么古埃及金字塔的石头缝隙，连一张刀片都插不进去？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #F5ECD7;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── 顶部栏 ── */
+    .top-bar {
+      background: #3E2723;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #D4A017;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ── Hero 区 ── */
+    .hero {
+      background: linear-gradient(160deg, #3E2723 0%, #795548 50%, #D4A017 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "🔺";
+      position: absolute;
+      right: 10px;
+      bottom: -20px;
+      font-size: 160px;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #F5D76E;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #F5D76E;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #D4A017;
+      flex-shrink: 0;
+    }
+
+    /* ── 核心发现区 ── */
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #D4A017;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #3E2723;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #D4A017;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #3E2723;
+      font-weight: 600;
+    }
+
+    /* ── 分割线 ── */
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #D4A017, transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── 四宫格机制 ── */
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #FDF8ED;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #E6D5A8;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3E2723;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    /* ── 趣味冷知识 ── */
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #3E2723, #795548);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-content {}
+    .fun-label {
+      font-size: 10px;
+      color: #D4A017;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    /* ── 底部 ── */
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #FDF8ED;
+      border-top: 1px solid #E6D5A8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #D4A017;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #D4A017;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.017 · 考古学</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">🏛️ 历史考古</div>
+      <div class="hero-title">古埃及金字塔的石头缝隙<br><em>连刀片都插不进去？</em></div>
+      <div class="hero-sub">不是外星人，是四千五百年前的化学家</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">0.5<span>mm</span></div>
+        <div class="fact-caption">吉萨大金字塔石块间的<br><strong>平均接缝精度</strong></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🧪</span><span class="mech-title">砂岩假象</span></div>
+        <div class="mech-text">石灰岩浸泡特殊溶液，表面晶体结构软化</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">💧</span><span class="mech-title">人工浇筑</span></div>
+        <div class="mech-text">软化层像石膏一样填满缝隙，消除间隙</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🔬</span><span class="mech-title">再结晶粘合</span></div>
+        <div class="mech-text">浇水后晶体重新生长，与相邻石块融为一体</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🧱</span><span class="mech-title">精密切割</span></div>
+        <div class="mech-text">铜锯+石英砂研磨，石块平整度极高</div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">电子显微镜分析发现，金字塔接缝处确实存在「再结晶」痕迹——古人用的是化学，不是魔法。</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年5月6日</span>
+      </div>
+      <div class="footer-right">智囊团团 & 2号位</div>
+    </div>
+
+  </div>
+</body>
+</html>
