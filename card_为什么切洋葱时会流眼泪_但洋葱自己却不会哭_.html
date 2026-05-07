@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日一个为什么 | 为什么切洋葱时会流眼泪，但洋葱自己却"不会哭"？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #1A0033;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── 顶部栏 ── */
+    .top-bar {
+      background: #1A1A1A;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #CE93D8;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ── Hero 区 ── */
+    .hero {
+      background: linear-gradient(160deg, #1A0033 0%, #4A0072 40%, #7B1FA2 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "🧅";
+      position: absolute;
+      right: 10px;
+      bottom: -20px;
+      font-size: 120px;
+      opacity: 0.06;
+      line-height: 1;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        20px 10px 0 rgba(255,255,255,0.4),
+        -15px 35px 0 rgba(255,255,255,0.25),
+        50px 25px 0 rgba(255,255,255,0.3),
+        10px 60px 0 rgba(255,255,255,0.15);
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(206,147,216,0.25);
+      border: 1px solid rgba(206,147,216,0.5);
+      color: #E1BEE7;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #E1BEE7;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #9C27B0;
+      flex-shrink: 0;
+    }
+
+    /* ── 核心发现区 ── */
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #7B1FA2;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #1A1A1A;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #7B1FA2;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #1A1A1A;
+      font-weight: 600;
+    }
+
+    /* ── 分割线 ── */
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #7B1FA2, transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── 四宫格机制 ── */
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #F3E5F5;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #E1BEE7;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #4A0072;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    /* ── 趣味冷知识 ── */
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #1A0033, #4A0072);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-content {}
+    .fun-label {
+      font-size: 10px;
+      color: #CE93D8;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    /* ── 底部 ── */
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #F3E5F5;
+      border-top: 1px solid #E1BEE7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9C27B0;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #7B1FA2;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.013 · 植物学</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">🧅 植物学冷知识</div>
+      <div class="hero-title">切洋葱会<em>流眼泪</em>，<br>但洋葱自己却<br>"不会哭"？</div>
+      <div class="hero-sub">洋葱的"化学武器"——蒜氨酸酶的防御机制</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">8<span>cm</span></div>
+        <div class="fact-caption">刺激气体在<strong>8厘米内</strong>浓度最高<br>刚好是你切洋葱时眼睛的距离</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🧅</span><span class="mech-title">蒜氨酸酶</span></div>
+        <div class="mech-text">细胞完整时酶与前体分住两"室"，切开后混合瞬间产次磺酸</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">💨</span><span class="mech-title">刺激气体</span></div>
+        <div class="mech-text">次磺酸转化为syn-丙硫醛-S-氧化物，挥发性极强，飘向你的眼睛</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">👁️</span><span class="mech-title">眼睛防御</span></div>
+        <div class="mech-text">气体接触泪液生成微量硫酸，眼睛发信号：加速分泌泪液冲走它！</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🛡️</span><span class="mech-title">洋葱不怕</span></div>
+        <div class="mech-text">刺激物用来驱敌，细胞被破坏前不释放——你切它时，它已"牺牲"</div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">冷藏30分钟再切，酶反应速度大幅下降，可以少流泪。科学家正研究用基因编辑"沉默"这种酶，培育"不哭洋葱"！</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年5月7日</span>
+      </div>
+      <div class="footer-right">智囊团团 & 2号位</div>
+    </div>
+
+  </div>
+</body>
+</html>
