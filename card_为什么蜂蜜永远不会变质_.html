@@ -11,21 +11,16 @@
       background: #F0EBE0;
       display: flex;
       justify-content: center;
-      padding: 24px;
+      padding: 40px;
       min-height: 100vh;
-      width: 100%;
+      min-width: 620px;
       overflow-x: hidden;
-    }
-    @media (max-width: 560px) {
-      html, body { padding: 12px; }
     }
 
     /* 3:4 卡片 宽540px，高度自适应 */
     .card {
       width: 540px;
-      max-width: 100%;
-      aspect-ratio: 3/4;
-      height: auto;
+      min-width: 540px;
       background: #fff;
       border-radius: 20px;
       box-shadow: 0 12px 48px rgba(0,0,0,0.15);
@@ -37,7 +32,7 @@
 
     /* ── 顶部栏 ── */
     .top-bar {
-      background: #1A1A1A;
+      background: #2C2416;
       padding: 16px 28px;
       display: flex;
       justify-content: space-between;
@@ -57,7 +52,7 @@
       letter-spacing: 1px;
     }
 
-    /* ── Hero 区：C位大标题 ── */
+    /* ── Hero 区 ── */
     .hero {
       background: linear-gradient(160deg, #2C2416 0%, #5C3D11 60%, #C9954A 100%);
       padding: 36px 32px 32px;
@@ -78,8 +73,8 @@
     }
     .hero-tag {
       display: inline-block;
-      background: rgba(201,149,74,0.3);
-      border: 1px solid rgba(201,149,74,0.5);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
       color: #E8B86D;
       font-size: 11px;
       letter-spacing: 2px;
@@ -138,7 +133,7 @@
     .fact-num {
       font-size: 56px;
       font-weight: 900;
-      color: #1A1A1A;
+      color: #2C2416;
       line-height: 1;
       letter-spacing: -2px;
     }
@@ -152,7 +147,7 @@
       line-height: 1.6;
     }
     .fact-caption strong {
-      color: #1A1A1A;
+      color: #2C2416;
       font-weight: 600;
     }
 
@@ -199,7 +194,7 @@
     /* ── 趣味冷知识 ── */
     .fun-fact {
       margin: 0 32px 20px;
-      background: linear-gradient(135deg, #2C2416, #3D2E0F);
+      background: linear-gradient(135deg, #2C2416, #5C3D11);
       border-radius: 12px;
       padding: 14px 18px;
       flex-shrink: 0;
@@ -265,30 +260,30 @@
 
     <div class="top-bar">
       <span class="series">每日一个为什么</span>
-      <span class="issue">VOL.009 · 自然科学</span>
+      <span class="issue">VOL.014 · 生物化学</span>
     </div>
 
     <div class="hero">
-      <div class="hero-tag">🐝 生物 · 食品科学</div>
-      <div class="hero-title">为什么<br><em>蜂蜜永远不会变质？</em></div>
-      <div class="hero-sub">考古学家在埃及金字塔里发现了3000年前的蜂蜜，竟然还能吃</div>
+      <div class="hero-tag">🐝 生物</div>
+      <div class="hero-title">为什么<br><em>蜂蜜永远不会变质</em></div>
+      <div class="hero-sub">考古学家在埃及金字塔里发现了3000年前的蜂蜜</div>
     </div>
 
     <div class="discovery">
       <div class="discovery-label">核心发现</div>
       <div class="discovery-fact">
         <div class="fact-num">3000<span>年</span></div>
-        <div class="fact-caption">金字塔中出土的蜂蜜<br><strong>至今仍可食用</strong></div>
+        <div class="fact-caption">金字塔中出土<br><strong>至今仍可食用</strong></div>
       </div>
     </div>
 
     <div class="divider"></div>
 
     <div class="mechanisms">
-      
+
       <div class="mech-card">
         <div class="mech-top"><span class="mech-icon">💧</span><span class="mech-title">超低水分</span></div>
-        <div class="mech-text">含水量≤18%，细菌根本无法生存</div>
+        <div class="mech-text">含水量极低，细菌无法生存</div>
       </div>
 
       <div class="mech-card">
@@ -297,13 +292,13 @@
       </div>
 
       <div class="mech-card">
-        <div class="mech-top"><span class="mech-icon">⚗️</span><span class="mech-title">天然消毒</span></div>
-        <div class="mech-text">蜜蜂分泌过氧化氢，自带杀菌</div>
+        <div class="mech-top"><span class="mech-icon">⚗️</span><span class="mech-title">过氧化氢</span></div>
+        <div class="mech-text">蜜蜂分泌天然消毒成分</div>
       </div>
 
       <div class="mech-card">
-        <div class="mech-top"><span class="mech-icon">🍋</span><span class="mech-title">酸性屏障</span></div>
-        <div class="mech-text">pH值3-4，微生物无法存活</div>
+        <div class="mech-top"><span class="mech-icon">🍋</span><span class="mech-title">酸性pH</span></div>
+        <div class="mech-text">天然酸性环境，抑制微生物</div>
       </div>
     </div>
 
@@ -311,16 +306,16 @@
       <span class="fun-icon">💡</span>
       <div class="fun-content">
         <div class="fun-label">冷知识</div>
-        <div class="fun-text">保存得当的蜂蜜，理论上永久不坏——你的曾孙的曾孙，还能吃这罐蜜</div>
+        <div class="fun-text">真正的天然成熟蜂蜜，永久不坏；选购时认准raw honey或unpasteurized标注</div>
       </div>
     </div>
 
     <div class="footer">
       <div class="footer-left">
         <div class="footer-dot"></div>
-        <span class="footer-date">2026年4月16日</span>
+        <span class="footer-date">2026年5月10日</span>
       </div>
-      <div class="footer-right">每日一问</div>
+      <div class="footer-right">智囊团团 & 2号位</div>
     </div>
 
   </div>
