@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=540">
+<title>为什么黄金是黄色的？</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'PingFang SC','Microsoft YaHei',sans-serif; width:540px; background:#111; }
+.card { background:#fff; border-radius:32px; overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,0.35); }
+
+/* Header */
+.header { background:#1A1000; padding:20px 28px 16px; display:flex; justify-content:space-between; align-items:center; }
+.header-left { display:flex; align-items:center; gap:8px; }
+.header-badge { background:#C9954A; color:#1A1000; font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:1px; }
+.header-right { color:#C9954A; font-size:12px; opacity:0.8; }
+
+/* Hero */
+.hero {
+  background:linear-gradient(160deg, #1A1000 0%, #3D2B00 40%, #5C3D11 100%);
+  padding:36px 28px 32px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-40px; right:-40px;
+  width:200px; height:200px; background:radial-gradient(circle, rgba(201,149,74,0.15) 0%, transparent 70%);
+  border-radius:50%;
+}
+.hero::after {
+  content:''; position:absolute; bottom:-60px; left:-30px;
+  width:180px; height:180px; background:radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 70%);
+  border-radius:50%;
+}
+.hero-tag { display:inline-block; background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4); color:#FFD700; font-size:12px; padding:5px 14px; border-radius:20px; margin-bottom:16px; letter-spacing:0.5px; }
+.hero-title { font-size:30px; font-weight:800; color:#FFD700; line-height:1.3; margin-bottom:12px; letter-spacing:-0.5px; }
+.hero-subtitle { font-size:14px; color:rgba(255,248,231,0.7); line-height:1.6; }
+
+/* Core */
+.core { display:flex; align-items:center; gap:20px; padding:24px 28px; background:#FAFAFA; }
+.core-num-wrap { flex-shrink:0; text-align:center; background:linear-gradient(135deg, #1A1000,#3D2B00); border-radius:16px; padding:16px 20px; min-width:100px; }
+.core-num { font-size:38px; font-weight:900; color:#FFD700; line-height:1; }
+.core-unit { font-size:12px; color:rgba(255,248,231,0.6); margin-top:4px; }
+.core-caption { font-size:14px; color:#2C1810; line-height:1.7; }
+.core-caption strong { color:#3D2B00; }
+
+/* Section label */
+.section-label { padding:20px 28px 0; font-size:12px; font-weight:700; color:#8B6914; letter-spacing:2px; text-transform:uppercase; }
+
+/* Grid */
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px 28px 24px; }
+.cell { background:#FAFAFA; border-radius:16px; padding:16px; }
+.cell-icon { font-size:22px; margin-bottom:8px; }
+.cell-title { font-size:13px; font-weight:700; color:#2C1810; margin-bottom:5px; }
+.cell-desc { font-size:11px; color:#666; line-height:1.5; }
+
+/* Fun fact */
+.fun { margin:0 28px 24px; background:linear-gradient(135deg, #FFF8E0, #FFF3CC); border-left:4px solid #C9954A; border-radius:0 14px 14px 0; padding:16px 18px; }
+.fun-label { font-size:11px; color:#8B6914; font-weight:700; letter-spacing:1px; margin-bottom:6px; }
+.fun-text { font-size:13px; color:#2C1810; line-height:1.7; }
+
+/* Footer */
+.footer { background:#1A1000; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; }
+.footer-date { color:rgba(201,149,74,0.7); font-size:11px; }
+.footer-brand { color:#C9954A; font-size:12px; font-weight:700; letter-spacing:1px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="header-left">
+      <span class="header-badge">每日一个为什么</span>
+    </div>
+    <span class="header-right">VOL 017 · 自然科学</span>
+  </div>
+  <div class="hero">
+    <div class="hero-tag">🔬 化学</div>
+    <h1 class="hero-title">为什么黄金是黄色的？</h1>
+    <p class="hero-subtitle">爱因斯坦的相对论，让金子闪闪发光</p>
+  </div>
+  <div class="core">
+    <div class="core-num-wrap">
+      <div class="core-num">79</div>
+      <div class="core-unit">个质子</div>
+    </div>
+    <p class="core-caption">金原子核拥有79个质子<br>内层电子以<strong>近光速</strong>狂奔</p>
+  </div>
+  <div class="section-label">关键机制</div>
+  <div class="grid">
+    
+    <div class="cell">
+      <div class="cell-icon">⚛️</div>
+      <div class="cell-title">相对论效应</div>
+      <div class="cell-desc">高速电子获得更大相对论质量，轨道收缩、能级位移</div>
+    </div>
+    <div class="cell">
+      <div class="cell-icon">🔵</div>
+      <div class="cell-title">吸收蓝光</div>
+      <div class="cell-desc">原本反射蓝光的电子转而吸收蓝光，只留下红黄光</div>
+    </div>
+    <div class="cell">
+      <div class="cell-icon">💥</div>
+      <div class="cell-title">中子星碰撞</div>
+      <div class="cell-desc">黄金在中子星合并时合成，超新星爆炸几乎无法产生</div>
+    </div>
+    <div class="cell">
+      <div class="cell-icon">🏊</div>
+      <div class="cell-title">储量极少</div>
+      <div class="cell-desc">人类全部已开采黄金，可填满约3个标准游泳池</div>
+    </div>
+  </div>
+  <div class="fun">
+    <div class="fun-label">💡 冷知识</div>
+    <div class="fun-text">地球上的每一克黄金，都是数十亿年前某次宇宙车祸的遗产</div>
+  </div>
+  <div class="footer">
+    <span class="footer-date">2026年5月12日</span>
+    <span class="footer-brand">智囊团团</span>
+  </div>
+</div>
+</body>
+</html>
