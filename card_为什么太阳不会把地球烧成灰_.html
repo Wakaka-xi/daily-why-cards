@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日一个为什么 | 为什么太阳不会把地球"烧成灰"？</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #0D1B2A;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .top-bar {
+      background: #1A1A1A;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #F1C40F;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    .hero {
+      background: linear-gradient(160deg, #0D1B2A 0%, #1A237E 40%, #3949AB 75%, #F1C40F 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "☀";
+      position: absolute;
+      right: -10px;
+      bottom: -30px;
+      font-size: 180px;
+      font-weight: 900;
+      color: rgba(241,196,15,0.08);
+      line-height: 1;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      box-shadow: 30px 15px 0 1px rgba(255,255,255,0.2), 80px 40px 0 0px rgba(255,255,255,0.15), -10px 60px 0 1px rgba(255,255,255,0.2);
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(241,196,15,0.25);
+      border: 1px solid rgba(241,196,15,0.5);
+      color: #F4D03F;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 29px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #F4D03F;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #F1C40F;
+      flex-shrink: 0;
+    }
+
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #B7950B;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 52px;
+      font-weight: 900;
+      color: #1A1A1A;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 26px;
+      color: #B7950B;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #1A1A1A;
+      font-weight: 600;
+    }
+
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #F1C40F, transparent);
+      flex-shrink: 0;
+    }
+
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #E8EAF6;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #C5CAE9;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0D1B2A;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #0D1B2A, #1A237E);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-content {}
+    .fun-label {
+      font-size: 10px;
+      color: #F1C40F;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #E8EAF6;
+      border-top: 1px solid #C5CAE9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #F1C40F;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #B7950B;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.024 · 天文宇宙</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">☀ 宇宙物理</div>
+      <div class="hero-title">为什么太阳不会把地球<br><em>"烧成灰"</em>？</div>
+      <div class="hero-sub">太阳核心1500万°C，距地球1.5亿公里</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">1/<span>20亿</span></div>
+        <div class="fact-caption">到达地球的太阳能<br><strong>仅占总能量的二十亿分之一</strong></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🚀</span><span class="mech-title">真空隔热</span></div>
+        <div class="mech-text">太空没有空气和水，热量只能靠辐射传递，效率极低</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">📐</span><span class="mech-title">平方反比</span></div>
+        <div class="mech-text">距离翻倍能量剩四分之一，1.5亿公里外损耗惊人</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🛡</span><span class="mech-title">大气层</span></div>
+        <div class="mech-text">吸收紫外线和X射线，只有可见光和红外能穿透</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🧲</span><span class="mech-title">地球磁场</span></div>
+        <div class="mech-text">偏转太阳风高能粒子，保护通讯和电网系统</div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">地球所在的"宜居带"又称 Goldilocks Zone——就像童话里的金发姑娘，不太热、不太冷，一切都<strong>刚刚好</strong>。</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年5月21日</span>
+      </div>
+      <div class="footer-right">智囊团团 &amp; 2号位</div>
+    </div>
+
+  </div>
+</body>
+</html>
