@@ -1,173 +1,1397 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>630倒计时：确定性被重新定价的分水岭</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@300;400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #1B3A5C;
-            --accent-color-1: #C9A84C;
-            --accent-color-2: #475569;
-            --neutral-color: #64748B;
-            --slide-background: #F8FAFC;
-            --font-title: 'Montserrat', 'Noto Sans SC', sans-serif;
-            --font-body: 'Inter', 'Noto Sans SC', sans-serif;
-        }
-    </style>
-    <style>
-        .nav-btn, .page-indicator {
-            display: none;
-        }
-    </style>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // # 禁止修改
-        window.slideDataMap = new Map();
-    </script>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter','Noto Sans SC',sans-serif;overflow:hidden;background:#fff}
-        .font-title{font-family:'Montserrat','Noto Sans SC',sans-serif}
-        .font-body{font-family:'Inter','Noto Sans SC',sans-serif}
-        .text-primary{color:var(--primary-color)}
-        .text-accent-1{color:var(--accent-color-1)}
-        .text-accent-2{color:var(--accent-color-2)}
-        .text-neutral{color:var(--neutral-color)}
-        .bg-primary{background-color:var(--primary-color)}
-        .bg-accent-1{background-color:var(--accent-color-1)}
-        .bg-accent-2{background-color:var(--accent-color-2)}
-        .bg-neutral{background-color:var(--neutral-color)}
-        .slide-bg{background:var(--slide-background);background-size:cover;background-position:center;background-repeat:no-repeat}
-        .border-primary{border-color:var(--primary-color)}
-        .border-accent-1{border-color:var(--accent-color-1)}
-        .border-accent-2{border-color:var(--accent-color-2)}
-        .ppt-container{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:#1a1a1a;overflow:hidden;position:relative}
-        .ppt-viewport{width:1440px;height:810px;position:relative;background:#fff;box-shadow:0 10px 50px rgba(0,0,0,.5);overflow:visible;transform-origin:center center;flex-shrink:0}
-        .slide{width:1440px;height:810px;position:absolute;top:0;left:0;opacity:0;transition:opacity .5s ease,visibility 0s .5s}
-        .slide.active{opacity:1;visibility:visible;transition:opacity .5s ease,visibility 0s}
-        .nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:60px;height:60px;background:rgba(255,255,255,.9);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;color:#333;z-index:1000;transition:all .3s ease;box-shadow:0 4px 12px rgba(0,0,0,.15)}
-        .nav-btn:hover{background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.25);transform:translateY(-50%) scale(1.1)}
-        .nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:translateY(-50%) scale(1)}
-        .nav-btn-prev{left:40px}
-        .nav-btn-next{right:40px}
-        .progress-bar{position:fixed;bottom:0;left:0;width:100%;height:4px;background:rgba(255,255,255,.2);z-index:1000}
-        .progress-bar-fill{height:100%;background:var(--primary-color);transition:width .3s ease}
-        .page-indicator{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;z-index:1000;display:block}
-        .keyboard-hint{position:fixed;top:20px;right:20px;background:rgba(0,0,0,.7);color:#fff;padding:10px 15px;border-radius:8px;font-size:12px;z-index:1000;opacity:0;transition:opacity .3s ease}
-        .keyboard-hint.show{opacity:1}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>630倒计时：确定性被重新定价的分水岭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@300;400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary-color:#1B3A5C;--accent-color-1:#C9A84C;--accent-color-2:#475569;--neutral-color:#64748B;--slide-background:#F8FAFC;--font-title:'Montserrat','Noto Sans SC',sans-serif;--font-body:'Inter','Noto Sans SC',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Noto Sans SC',sans-serif;overflow:hidden;background:#1a1a1a}
+.slide-bg{background:#F8FAFC}
+.ppt-container{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ppt-viewport{width:1440px;height:810px;position:relative;background:#fff;box-shadow:0 10px 50px rgba(0,0,0,.5);overflow:hidden;transform-origin:center center;flex-shrink:0}
+.slide{width:1440px;height:810px;position:absolute;top:0;left:0;opacity:0;visibility:hidden;transition:opacity .5s ease}
+.slide.active{opacity:1;visibility:visible}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:50px;height:50px;background:rgba(255,255,255,.85);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;color:#333;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.15);transition:all .2s}
+.nav-btn:hover{background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.25)}
+.nav-btn:disabled{opacity:.2;cursor:not-allowed}
+.nav-btn-prev{left:20px}
+.nav-btn-next{right:20px}
+.progress-bar{position:fixed;bottom:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.15);z-index:1000}
+.progress-bar-fill{height:100%;background:var(--primary-color);transition:width .3s ease}
+.page-indicator{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;padding:6px 16px;border-radius:16px;font-size:13px;z-index:1000;pointer-events:none}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <!-- PPT 容器 -->
-    <div class="ppt-container">
-        <div class="ppt-viewport" id="ppt-viewport">
-            <!-- 幻灯片将由 JavaScript 动态插入 -->
-        </div>
-    </div>
-    
-    <!-- 导航按钮 -->
-    <button class="nav-btn nav-btn-prev" id="prevBtn" aria-label="上一页">
-        ←
-    </button>
-    <button class="nav-btn nav-btn-next" id="nextBtn" aria-label="下一页">
-        →
-    </button>
-    
-    <!-- 进度条 -->
-    <div class="progress-bar">
-        <div class="progress-bar-fill" id="progressBarFill"></div>
-    </div>
-    
-    <!-- 页码指示器 -->
-    <div class="page-indicator" id="pageIndicator">
-        1 / 1
-    </div>
-    
-    <!-- Vite Main Entry -->
-    <script type="module" src="./src/main.js"></script>
+<div class="ppt-container"><div class="ppt-viewport" id="ppt-viewport"></div></div>
+<button class="nav-btn nav-btn-prev" id="prevBtn" aria-label="上一页">&#8592;</button>
+<button class="nav-btn nav-btn-next" id="nextBtn" aria-label="下一页">&#8594;</button>
+<div class="progress-bar"><div class="progress-bar-fill" id="progressBarFill"></div></div>
+<div class="page-indicator" id="pageIndicator">...</div>
 
-    <!--  开始加载slide-N.js区域 -->
-    <!-- <script type="module" src="./src/slides/slide-{N}.js"></script> -->
-    <!--  结束加载slide-N.js区域 -->
-    <script type="module" src="./src/slides/slide-1.js"></script>
-      <script type="module" src="./src/slides/slide-2.js"></script>
-      <script type="module" src="./src/slides/slide-5.js"></script>
-      <script type="module" src="./src/slides/slide-3.js"></script>
-      <script type="module" src="./src/slides/slide-4.js"></script>
-      <script type="module" src="./src/slides/slide-8.js"></script>
-      <script type="module" src="./src/slides/slide-7.js"></script>
-      <script type="module" src="./src/slides/slide-6.js"></script>
-      <script type="module" src="./src/slides/slide-10.js"></script>
-      <script type="module" src="./src/slides/slide-9.js"></script>
-      <script type="module" src="./src/slides/slide-11.js"></script>
-      <script type="module" src="./src/slides/slide-12.js"></script>
-      <script type="module" src="./src/slides/slide-13.js"></script>
-      <script type="module" src="./src/slides/slide-14.js"></script>
-      <script type="module" src="./src/slides/slide-16.js"></script>
-      <script type="module" src="./src/slides/slide-15.js"></script>
-      <script type="module" src="./src/slides/slide-20.js"></script>
-      <script type="module" src="./src/slides/slide-18.js"></script>
-      <script type="module" src="./src/slides/slide-17.js"></script>
-      <script type="module" src="./src/slides/slide-21.js"></script>
-      <script type="module" src="./src/slides/slide-22.js"></script>
-      <script type="module" src="./src/slides/slide-19.js"></script>
-      <script type="module" src="./src/slides/slide-23.js"></script>
-      <script type="module" src="./src/slides/slide-24.js"></script>
-      <script type="module" src="./src/slides/slide-29.js"></script>
-      <script type="module" src="./src/slides/slide-27.js"></script>
-      <script type="module" src="./src/slides/slide-25.js"></script>
-      <script type="module" src="./src/slides/slide-28.js"></script>
-      <script type="module" src="./src/slides/slide-30.js"></script>
-      <script type="module" src="./src/slides/slide-32.js"></script>
-      <script type="module" src="./src/slides/slide-34.js"></script>
-      <script type="module" src="./src/slides/slide-37.js"></script>
-      <script type="module" src="./src/slides/slide-31.js"></script>
-      <script type="module" src="./src/slides/slide-26.js"></script>
-      <script type="module" src="./src/slides/slide-33.js"></script>
-      <script type="module" src="./src/slides/slide-35.js"></script>
-      <script type="module" src="./src/slides/slide-36.js"></script>
-      <script type="module" src="./src/slides/slide-38.js"></script>
-      <script type="module" src="/src/slides/slide-1.js"></script>
-    <script type="module" src="/src/slides/slide-2.js"></script>
-    <script type="module" src="/src/slides/slide-3.js"></script>
-    <script type="module" src="/src/slides/slide-4.js"></script>
-    <script type="module" src="/src/slides/slide-5.js"></script>
-    <script type="module" src="/src/slides/slide-6.js"></script>
-    <script type="module" src="/src/slides/slide-7.js"></script>
-    <script type="module" src="/src/slides/slide-8.js"></script>
-    <script type="module" src="/src/slides/slide-9.js"></script>
-    <script type="module" src="/src/slides/slide-10.js"></script>
-    <script type="module" src="/src/slides/slide-11.js"></script>
-    <script type="module" src="/src/slides/slide-12.js"></script>
-    <script type="module" src="/src/slides/slide-13.js"></script>
-    <script type="module" src="/src/slides/slide-14.js"></script>
-    <script type="module" src="/src/slides/slide-15.js"></script>
-    <script type="module" src="/src/slides/slide-16.js"></script>
-    <script type="module" src="/src/slides/slide-17.js"></script>
-    <script type="module" src="/src/slides/slide-18.js"></script>
-    <script type="module" src="/src/slides/slide-19.js"></script>
-    <script type="module" src="/src/slides/slide-20.js"></script>
-    <script type="module" src="/src/slides/slide-21.js"></script>
-    <script type="module" src="/src/slides/slide-22.js"></script>
-    <script type="module" src="/src/slides/slide-23.js"></script>
-    <script type="module" src="/src/slides/slide-24.js"></script>
-    <script type="module" src="/src/slides/slide-25.js"></script>
-    <script type="module" src="/src/slides/slide-26.js"></script>
-    <script type="module" src="/src/slides/slide-27.js"></script>
-    <script type="module" src="/src/slides/slide-28.js"></script>
-    <script type="module" src="/src/slides/slide-29.js"></script>
-    <script type="module" src="/src/slides/slide-30.js"></script>
-    <script type="module" src="/src/slides/slide-31.js"></script>
-    <script type="module" src="/src/slides/slide-32.js"></script>
-    <script type="module" src="/src/slides/slide-33.js"></script>
-    <script type="module" src="/src/slides/slide-34.js"></script>
-    <script type="module" src="/src/slides/slide-35.js"></script>
-    <script type="module" src="/src/slides/slide-36.js"></script>
-    <script type="module" src="/src/slides/slide-37.js"></script>
-    <script type="module" src="/src/slides/slide-38.js"></script>
-  </body>
+<script>
+// Slide data
+window.slideDataMap = new Map();
+window.slideDataMap.set(1, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#1B3A5C]/5 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#C9A84C]/5 rounded-full blur-3xl"></div>
+    <div class="relative z-10 max-w-[1100px] px-24 pt-40">
+      <div class="flex items-center gap-6 mb-12">
+        <div class="w-[3px] h-24 bg-[#1B3A5C]"></div>
+        <div>
+          <div class="text-[#475569] text-base font-semibold tracking-[0.3em] mb-4">630 SPECIAL TRAINING</div>
+          <h1 class="text-[4rem] font-bold text-[#1B3A5C] leading-tight">630倒计时：确定性被<br/>重新定价的分水岭</h1>
+        </div>
+      </div>
+      <p class="text-2xl text-[#64748B] mb-10 ml-9">销售意愿启动培训</p>
+      <div class="flex items-center gap-8 ml-9 text-[#94A3B8] text-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 bg-[#C9A84C] rounded-full"></div>
+          <span>讲师：老席</span>
+        </div>
+        <div class="w-[1px] h-5 bg-[#CBD5E1]"></div>
+        <span>2026年5月</span>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(2, `
+  <div class="w-[1440px] h-[810px] slide-bg flex items-center justify-center relative overflow-hidden">
+    <div class="w-[1350px] h-[720px] mx-auto my-[45px] relative z-10 flex flex-col justify-center">
+      <h2 class="text-4xl font-bold text-[#1B3A5C] mb-3 text-center">今天讲五件事</h2>
+      <div class="w-20 h-1 bg-[#C9A84C] mx-auto mb-10"></div>
+      <div class="max-w-[900px] mx-auto space-y-0">
+        <div class="flex items-center gap-6 p-5 border-b border-[#E2E8F0]">
+          <div class="w-12 h-12 bg-[#1B3A5C] text-white flex items-center justify-center text-lg font-bold flex-shrink-0 rounded-lg">一</div>
+          <div class="flex-1"><span class="text-xl text-[#1E293B] font-semibold">宏观大势：利率下行不可逆</span></div>
+          <div class="text-[#94A3B8] text-base">12min</div>
+        </div>
+        <div class="flex items-center gap-6 p-5 border-b border-[#E2E8F0]">
+          <div class="w-12 h-12 bg-[#1B3A5C] text-white flex items-center justify-center text-lg font-bold flex-shrink-0 rounded-lg">二</div>
+          <div class="flex-1"><span class="text-xl text-[#1E293B] font-semibold">制度规则：630到底怎么来的</span></div>
+          <div class="text-[#94A3B8] text-base">10min</div>
+        </div>
+        <div class="flex items-center gap-6 p-5 border-b border-[#E2E8F0]">
+          <div class="w-12 h-12 bg-[#1B3A5C] text-white flex items-center justify-center text-lg font-bold flex-shrink-0 rounded-lg">三</div>
+          <div class="flex-1"><span class="text-xl text-[#1E293B] font-semibold">产品趋势：低保底+浮动是大方向</span></div>
+          <div class="text-[#94A3B8] text-base">8min</div>
+        </div>
+        <div class="flex items-center gap-6 p-5 border-b border-[#E2E8F0]">
+          <div class="w-12 h-12 bg-[#1B3A5C] text-white flex items-center justify-center text-lg font-bold flex-shrink-0 rounded-lg">四</div>
+          <div class="flex-1"><span class="text-xl text-[#1E293B] font-semibold">客户价值：630前买的是"锁定权"</span></div>
+          <div class="text-[#94A3B8] text-base">10min</div>
+        </div>
+        <div class="flex items-center gap-6 p-5">
+          <div class="w-12 h-12 bg-[#1B3A5C] text-white flex items-center justify-center text-lg font-bold flex-shrink-0 rounded-lg">五</div>
+          <div class="flex-1"><span class="text-xl text-[#1E293B] font-semibold">销售视角：窗口要抓住，专业度要积累</span></div>
+          <div class="text-[#94A3B8] text-base">7min</div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(3, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">三个最确定的东西，同时变了</h1>
+        <p class="text-blue-200 text-base">当"常识"不再成立，确定性标签正在脱落</p>
+      </div>
+      <div class="grid grid-cols-3 gap-5 mb-6">
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-[#FEF3C7] rounded-lg flex items-center justify-center text-xl">🏅</div>
+            <p class="text-[#1E293B] text-base font-bold">黄金 = 避险？</p>
+          </div>
+          <div class="text-[#DC2626] text-[28px] font-black mb-2">-10.49%</div>
+          <p class="text-[#64748B] text-sm leading-relaxed">中东战火重燃，黄金应涨却单周暴跌，创1983年以来<strong class="text-[#1E293B]">43年最大单周跌幅</strong></p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-[#DBEAFE] rounded-lg flex items-center justify-center text-xl">💱</div>
+            <p class="text-[#1E293B] text-base font-bold">汇率 = 可预测？</p>
+          </div>
+          <div class="text-[#2563EB] text-[28px] font-black mb-2">7.35→6.83</div>
+          <p class="text-[#64748B] text-sm leading-relaxed">美元应走强，人民币却<strong class="text-[#1E293B]">升值超7%</strong>，时隔三年重返"6.8"区间以下</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-[#FEE2E2] rounded-lg flex items-center justify-center text-xl">📉</div>
+            <p class="text-[#1E293B] text-base font-bold">美债 = 无风险？</p>
+          </div>
+          <div class="text-[#DC2626] text-[28px] font-black mb-2">5.10%</div>
+          <p class="text-[#64748B] text-sm leading-relaxed">30年期站上5%，但40万亿国债年利息超1万亿——高收益是<strong class="text-[#1E293B]">"风险溢价"</strong></p>
+        </div>
+      </div>
+      <div class="bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-5 rounded-r-xl">
+        <p class="text-[#1E293B] text-lg leading-relaxed">三个曾经被认为"最确定"的东西，同时发生了变化。不是单一事件，是一个信号——<strong class="text-[#1B3A5C]">我们熟悉的"确定性"标签正在脱落。</strong>在这个背景下，630之前还有一个相对确定的窗口。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(4, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">美国国债收益率为什么这么高？</h1>
+        <p class="text-blue-200 text-base">全球资本市场的定价锚正在松动</p>
+      </div>
+      <div class="grid grid-cols-3 gap-5 mb-6">
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0] text-center">
+          <p class="text-[#64748B] text-sm mb-2">10年期美债</p>
+          <div class="text-[#DC2626] text-[36px] font-black">4.57%</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0] text-center">
+          <p class="text-[#64748B] text-sm mb-2">30年期美债</p>
+          <div class="text-[#DC2626] text-[36px] font-black">5.10%</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0] text-center">
+          <p class="text-[#64748B] text-sm mb-2">国债年利息</p>
+          <div class="text-[#DC2626] text-[36px] font-black">>$1万亿</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-5">
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4 pb-3 border-b border-[#E2E8F0]">核心PCE（美联储通胀金标准）</h3>
+          <div class="flex items-end gap-2 mb-4">
+            <span class="text-[#DC2626] text-[40px] font-black">2.5%</span>
+            <span class="text-[#64748B] text-base mb-2">~ 2.8%</span>
+          </div>
+          <p class="text-[#64748B] text-sm">目标2%，"最后一公里"走不完</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4 pb-3 border-b border-[#E2E8F0]">三大深层驱动</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2"><span class="text-[#DC2626] font-bold">•</span><span class="text-[#475569] text-sm">关税+劳动力短缺 → 通胀下不去 → 美联储不敢降息</span></div>
+            <div class="flex items-start gap-2"><span class="text-[#DC2626] font-bold">•</span><span class="text-[#475569] text-sm">联邦赤字"无底洞"：发债多到买家不够用</span></div>
+            <div class="flex items-start gap-2"><span class="text-[#DC2626] font-bold">•</span><span class="text-[#475569] text-sm">美元信用裂缝：各国央行减持美债、增持黄金</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(5, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">中国利率为什么持续下降？</h1>
+        <p class="text-blue-200 text-base">不是因为央行"想"降，是因为经济基本面的三个不可逆变化</p>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 bg-[#FEF3C7] text-[#B45309] rounded-lg flex items-center justify-center font-bold">①</span><span class="font-bold text-[#1B3A5C]">CPI通缩压力</span></div>
+          <div class="flex items-baseline gap-2 mb-2"><span class="text-[#DC2626] text-[28px] font-black">0%-0.5%</span><span class="text-[#64748B] text-sm">vs 健康值 2%-3%</span></div>
+          <p class="text-[#64748B] text-sm">改革开放以来最持久的低通胀期</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 bg-[#DBEAFE] text-[#1E40AF] rounded-lg flex items-center justify-center font-bold">②</span><span class="font-bold text-[#1B3A5C]">存款利率同步下行</span></div>
+          <div class="flex items-baseline gap-2 mb-2"><span class="text-[#DC2626] text-[28px] font-black">1年&lt;1%</span><span class="text-[#64748B] text-sm">5年定存部分下架</span></div>
+          <p class="text-[#64748B] text-sm">LPR从4.25%→3.00%，7年降125bp</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 bg-[#FEE2E2] text-[#991B1B] rounded-lg flex items-center justify-center font-bold">③</span><span class="font-bold text-[#1B3A5C]">三大结构性力量</span></div>
+          <div class="space-y-2 text-[#475569] text-sm">
+            <div>• 人口老龄化：60岁以上超3亿（22%），人口负增长</div>
+            <div>• 债务高企：宏观杠杆率超300%</div>
+            <div>• 经济换挡：GDP从10%→5%，回报率下降</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 bg-[#DCFCE7] text-[#166534] rounded-lg flex items-center justify-center font-bold">④</span><span class="font-bold text-[#1B3A5C]">75万亿定存到期</span></div>
+          <div class="flex items-baseline gap-2 mb-2"><span class="text-[#2563EB] text-[28px] font-black">75万亿</span><span class="text-[#64748B] text-sm">日均3000亿释放</span></div>
+          <p class="text-[#64748B] text-sm">资金需要新出口（中金测算）</p>
+        </div>
+      </div>
+      <div class="mt-4 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl">
+        <p class="text-[#1E293B] text-base">利率下降不是周期性波动，是<strong class="text-[#1B3A5C]">结构性趋势</strong>。日本从1990年降到0%用了30年，中国正在走相似的路径。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(6, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">你的钱，还能往哪放？</h1>
+        <p class="text-blue-200 text-base">一个一个出口，正在关上</p>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#DC2626]"><p class="font-bold text-[#1B3A5C] mb-1">境外投资</p><p class="text-[#64748B] text-xs mb-2">富途/老虎被立案，两年后关停</p><p class="text-[#DC2626] font-bold text-lg">境外 ≠ 出口</p></div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#DC2626]"><p class="font-bold text-[#1B3A5C] mb-1">银行存款</p><p class="text-[#64748B] text-xs mb-2">1年定存跌破1%，活期0.05%</p><p class="text-[#DC2626] font-bold text-lg">存款 ≠ 保值</p></div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#DC2626]"><p class="font-bold text-[#1B3A5C] mb-1">银行理财</p><p class="text-[#64748B] text-xs mb-2">净值化不保本，富安娜亏1亿+</p><p class="text-[#DC2626] font-bold text-lg">理财 ≠ 保本</p></div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#DC2626]"><p class="font-bold text-[#1B3A5C] mb-1">信托产品</p><p class="text-[#64748B] text-xs mb-2">远离自然人，门槛提高</p><p class="text-[#DC2626] font-bold text-lg">信托 ≠ 稳健</p></div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#DC2626]"><p class="font-bold text-[#1B3A5C] mb-1">A股市场</p><p class="text-[#64748B] text-xs mb-2">散户80%交易量拿不到10%利润</p><p class="text-[#DC2626] font-bold text-lg">努力 ≠ 收益</p></div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#DC2626]"><p class="font-bold text-[#1B3A5C] mb-1">房产</p><p class="text-[#64748B] text-xs mb-2">投资降13.7%，成交周期187天</p><p class="text-[#DC2626] font-bold text-lg">房产 ≠ 财富锚</p></div>
+      </div>
+      <div class="mt-5 bg-[#FEF2F2] border-l-4 border-[#DC2626] p-4 rounded-r-xl">
+        <p class="text-[#991B1B] text-base font-semibold">六个出口，六个方向，没有一个方向是通畅的。不是"某个渠道不好"，是所有渠道同时出问题。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(7, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">你熟悉的"确定性"，还剩几个？</h1>
+        <p class="text-blue-200 text-base">11个标签，同时脱落</p>
+      </div>
+      <div class="grid grid-cols-4 gap-3 mb-4">
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">乱世藏金</p><p class="text-[#475569] text-[11px]">黄金暴跌10.49%</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">美元走强</p><p class="text-[#475569] text-[11px]">人民币升值7%</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">美债安全</p><p class="text-[#475569] text-[11px]">40万亿赤字</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">房产只涨</p><p class="text-[#475569] text-[11px]">投资降13.7%</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">存款安全</p><p class="text-[#475569] text-[11px]">跌破1%</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">理财躺赚</p><p class="text-[#475569] text-[11px]">净值化不保本</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">刚兑可信</p><p class="text-[#475569] text-[11px]">宜信全面清退</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">信托稳健</p><p class="text-[#475569] text-[11px]">远离自然人</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">股市机会</p><p class="text-[#475569] text-[11px]">越努力越亏</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">境外多元</p><p class="text-[#475569] text-[11px]">渠道关闭</p></div>
+        <div class="bg-white p-3 rounded-lg border border-[#FEE2E2] text-center"><p class="text-[#DC2626] line-through text-xs mb-1">美元霸权</p><p class="text-[#475569] text-[11px]">去美元化加速</p></div>
+      </div>
+      <div class="bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl">
+        <p class="text-[#1E293B] text-base">十一个"确定性"标签，同时脱落。不是某一件事出问题了，是<strong class="text-[#1B3A5C]">整个"确定性"的标尺在变</strong>。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(8, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">利率下行不是周期，是结构</h1>
+        <p class="text-blue-200 text-base">模块一 · 小结</p>
+      </div>
+      <div class="flex flex-col items-center gap-4 max-w-[1000px] mx-auto">
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] w-full text-center"><span class="text-[#64748B] text-sm">全球</span><p class="text-[#1E293B] font-semibold">美债5% + 通胀降不下来 + 赤字无底洞 + 美元信用裂缝</p></div>
+        <div class="text-[#C9A84C] text-2xl">↓</div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] w-full text-center"><span class="text-[#64748B] text-sm">国内</span><p class="text-[#1E293B] font-semibold">利率下行 + CPI通缩 + 存款跌破1% + 三大结构力</p></div>
+        <div class="text-[#C9A84C] text-2xl">↓</div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] w-full text-center"><span class="text-[#64748B] text-sm">出口</span><p class="text-[#1E293B] font-semibold">六个出口同时关闭</p></div>
+        <div class="text-[#C9A84C] text-2xl">↓</div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] w-full text-center"><span class="text-[#64748B] text-sm">标签</span><p class="text-[#1E293B] font-semibold">11个确定性标签同时脱落</p></div>
+        <div class="text-[#C9A84C] text-2xl">↓</div>
+        <div class="bg-[#1B3A5C] p-5 rounded-xl w-full text-center"><p class="text-white text-xl font-bold">630窗口是"确定性稀缺时代"的相对确定节点</p></div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(9, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">先分清两个"利率"就够了</h1>
+        <p class="text-blue-200 text-base">模块二 · 制度规则</p>
+      </div>
+      <div class="grid grid-cols-2 gap-8 max-w-[1100px] mx-auto">
+        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-[#1B3A5C]">
+          <h3 class="text-[22px] font-bold text-[#1B3A5C] mb-4">预定利率</h3>
+          <p class="text-[#475569] text-base mb-3">产品定价的"保证利率"上限</p>
+          <p class="text-[#DC2626] text-[40px] font-black mb-3">1.75%</p>
+          <div class="bg-[#DBEAFE] p-3 rounded-lg"><p class="text-[#1E40AF] text-sm font-semibold">客户一定能拿到</p></div>
+          <p class="text-[#94A3B8] text-xs mt-3">行业动态调整机制自动触发</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-[#C9A84C]">
+          <h3 class="text-[22px] font-bold text-[#1B3A5C] mb-4">演示利率</h3>
+          <p class="text-[#475569] text-base mb-3">分红假想收益率</p>
+          <p class="text-[#C9A84C] text-[40px] font-black mb-3">3.9%→3.5%</p>
+          <div class="bg-[#FEF3C7] p-3 rounded-lg"><p class="text-[#92400E] text-sm font-semibold">≠ 实际收益</p></div>
+          <p class="text-[#94A3B8] text-xs mt-3">监管窗口指导</p>
+        </div>
+      </div>
+      <div class="mt-6 text-center">
+        <p class="text-[#64748B] text-lg">预定利率（保证） ← 演示利率（展示） —— <strong class="text-[#1B3A5C]">演示 ≠ 保证</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(10, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">630不是一份文件，是一条传导链</h1>
+        <p class="text-blue-200 text-base">2025年：制度启动</p>
+      </div>
+      <div class="relative flex justify-between max-w-[1000px] mx-auto mt-20">
+        <div class="absolute top-8 left-[15%] right-[15%] h-[3px] bg-[#CBD5E1]"></div>
+        <div class="relative z-10 text-center w-[200px]">
+          <div class="w-16 h-16 bg-[#1B3A5C] rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">1月</div>
+          <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+            <p class="font-bold text-[#1B3A5C] text-sm mb-1">建立预定利率动态调整机制</p>
+            <p class="text-[#94A3B8] text-xs">正式文件</p>
+          </div>
+        </div>
+        <div class="relative z-10 text-center w-[200px]">
+          <div class="w-16 h-16 bg-[#1B3A5C] rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">6月</div>
+          <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+            <p class="font-bold text-[#1B3A5C] text-sm mb-1">确立低/中/高三档演示利率框架</p>
+            <p class="text-[#94A3B8] text-xs">374号文件</p>
+          </div>
+        </div>
+        <div class="relative z-10 text-center w-[200px]">
+          <div class="w-16 h-16 bg-[#C9A84C] rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">7月</div>
+          <div class="bg-white p-4 rounded-xl shadow-lg border-2 border-[#C9A84C]">
+            <p class="font-bold text-[#1B3A5C] text-sm mb-1">预定利率 2%→1.75%</p>
+            <p class="text-[#C9A84C] text-xs font-semibold">机制自动触发</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-center text-[#94A3B8] text-sm mt-12">2025年</p>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(11, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">2026年，窗口指导收紧</h1>
+        <p class="text-blue-200 text-base">630 = 行业共识设定的存量产品整改最后期限</p>
+      </div>
+      <div class="relative flex justify-center gap-20 max-w-[900px] mx-auto mt-16">
+        <div class="relative z-10 text-center w-[220px]">
+          <div class="w-16 h-16 bg-[#1B3A5C] rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">3月</div>
+          <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+            <p class="font-bold text-[#1B3A5C] text-sm mb-1">负面清单发布</p>
+            <p class="text-[#64748B] text-xs">红利承诺不得超演示利率</p>
+          </div>
+        </div>
+        <div class="relative z-10 text-center w-[220px]">
+          <div class="w-16 h-16 bg-[#DC2626] rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">630</div>
+          <div class="bg-white p-4 rounded-xl shadow-lg border-2 border-[#DC2626]">
+            <p class="font-bold text-[#DC2626] text-sm mb-1">演示利率 3.9%→3.5%</p>
+            <p class="text-[#DC2626] text-xs font-semibold">存量产品整改最后期限</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10 max-w-[900px] mx-auto">
+        <div class="bg-[#FEF2F2] border-l-4 border-[#DC2626] p-4 rounded-r-xl mb-4">
+          <p class="text-[#991B1B] text-base font-semibold">关键澄清："630"不是一份文件的编号。</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <p class="text-[#1E293B] text-base text-center"><strong>传导逻辑：</strong>市场利率↓ → 预定利率联动下调 → 演示利率窗口指导收紧 → <strong class="text-[#DC2626]">630是最后期限</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(12, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">保险产品，越来越"真"</h1>
+        <p class="text-blue-200 text-base">模块三 · 产品趋势</p>
+      </div>
+      <div class="flex items-center justify-center gap-0 max-w-[1100px] mx-auto mt-12">
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0] w-[300px] text-center">
+          <div class="text-[#1B3A5C] text-sm font-bold mb-2">1999-2013</div>
+          <div class="text-[#1B3A5C] text-[28px] font-black mb-2">高保证时代</div>
+          <div class="text-[#64748B] text-base mb-2">预定利率 2.5%</div>
+          <div class="bg-[#DBEAFE] p-2 rounded text-[#1E40AF] text-xs">高利率时代尾巴</div>
+        </div>
+        <div class="text-[#C9A84C] text-3xl mx-2">→</div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-[#E2E8F0] w-[300px] text-center">
+          <div class="text-[#1B3A5C] text-sm font-bold mb-2">2013-2023</div>
+          <div class="text-[#1B3A5C] text-[28px] font-black mb-2">费率市场化</div>
+          <div class="text-[#64748B] text-base mb-2">预定利率 3.5%</div>
+          <div class="bg-[#FEF3C7] p-2 rounded text-[#92400E] text-xs">利率下行初期</div>
+        </div>
+        <div class="text-[#C9A84C] text-3xl mx-2">→</div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-[#DC2626] w-[300px] text-center">
+          <div class="text-[#DC2626] text-sm font-bold mb-2">2023-</div>
+          <div class="text-[#DC2626] text-[28px] font-black mb-2">低保底+浮动</div>
+          <div class="text-[#DC2626] text-base mb-2">预定利率 1.75%</div>
+          <div class="bg-[#FEE2E2] p-2 rounded text-[#991B1B] text-xs">低利率常态</div>
+        </div>
+      </div>
+      <div class="mt-8 text-center">
+        <p class="text-[#1E293B] text-lg">保险产品演变，就三个字：<strong class="text-[#1B3A5C]">越来越真</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(13, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-6">
+        <h1 class="text-[36px] font-bold text-white mb-1">未来分红险：保底更低，浮动更重</h1>
+        <p class="text-blue-200 text-base">低保底 + 高浮动是大方向</p>
+      </div>
+      <div class="grid grid-cols-3 gap-5 max-w-[1100px] mx-auto">
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#1B3A5C]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4">保底部分</h3>
+          <div class="flex items-baseline gap-1 mb-3"><span class="text-[#DC2626] text-[24px] font-black">1.75%</span><span class="text-[#94A3B8]">→ 1.5% → 1.25%</span></div>
+          <p class="text-[#64748B] text-sm">预定利率与市场利率挂钩，市场利率在降</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#C9A84C]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4">浮动部分</h3>
+          <div class="text-[#C9A84C] text-[24px] font-black mb-3">越来越重要</div>
+          <p class="text-[#64748B] text-sm">分红实现率、投资能力——保险公司靠真本事说话</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#475569]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4">演示方式</h3>
+          <div class="text-[#475569] text-[24px] font-black mb-3">越来越保守</div>
+          <p class="text-[#64748B] text-sm">上限持续压降——监管防止"画大饼"</p>
+        </div>
+      </div>
+      <div class="mt-6 bg-[#DBEAFE] p-5 rounded-xl max-w-[1100px] mx-auto">
+        <p class="text-[#1E40AF] text-base"><strong>好处：</strong>保险公司不会被套牢。<strong>但：</strong>客户不能再闭着眼睛买，得看保险公司的投资能力。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(14, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630不是"降完了"，是"开始降了"</h1>
+        <p class="text-blue-200 text-base">动态调整机制已经启动，未来还会再调</p>
+      </div>
+      <div class="grid grid-cols-2 gap-5 max-w-[1100px] mx-auto">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] mb-3">国际经验</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#1B3A5C] rounded-full mt-2"></div><div><p class="text-[#1E293B] font-semibold">日本</p><p class="text-[#64748B] text-sm">从1990年降到0%，用了30年</p></div></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#C9A84C] rounded-full mt-2"></div><div><p class="text-[#1E293B] font-semibold">欧洲</p><p class="text-[#64748B] text-sm">正利率→零利率→负利率，用了十几年</p></div></div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] mb-3">数据支撑</h3>
+          <div class="text-center mb-3"><span class="text-[#2563EB] text-[36px] font-black">3.14%</span><p class="text-[#64748B] text-sm">近三年行业平均投资收益率</p></div>
+          <div class="bg-[#F0F9FF] p-3 rounded-lg"><p class="text-[#0C4A6E] text-sm">背后是<strong>分红平滑机制</strong>：好年份存特储，差年份释放，让客户拿到相对稳定的分红</p></div>
+        </div>
+      </div>
+      <div class="mt-5 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl max-w-[1100px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center"><strong class="text-[#1B3A5C]">630前投保的客户，锁定的不仅是更高的演示基数，也是"缓冲机制还在"的时代红利。</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(15, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630前买的，是"锁定权"</h1>
+        <p class="text-blue-200 text-base">同样的钱，630前买到的是双重确定性标准</p>
+      </div>
+      <div class="grid grid-cols-4 gap-3 mb-4 max-w-[1150px] mx-auto">
+        <div class="bg-gradient-to-b from-[#C9A84C] to-[#F5D97A] p-4 rounded-xl text-center shadow-lg border-2 border-[#C9A84C]">
+          <p class="text-[12px] text-[#1B3A5C] font-semibold mb-2">630前（当前窗口）</p>
+          <p class="text-[#1B3A5C] text-[28px] font-black mb-1">3.9%</p><p class="text-[#1B3A5C] text-xs">演示利率</p>
+          <div class="bg-white/50 rounded-lg p-1.5 mt-2"><p class="text-[#1B3A5C] text-xs font-bold">1.75%</p><p class="text-[10px] text-[#475569]">保底利率</p></div>
+          <div class="mt-2 bg-[#1B3A5C] text-white text-[10px] rounded-full px-2 py-0.5">双重锁定</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] text-center">
+          <p class="text-[12px] text-[#64748B] font-semibold mb-2">630后</p>
+          <p class="text-[#475569] text-[28px] font-black mb-1">3.5%</p><p class="text-[#64748B] text-xs">演示利率</p>
+          <div class="bg-[#F1F5F9] rounded-lg p-1.5 mt-2"><p class="text-[#475569] text-xs font-bold">1.75%</p><p class="text-[10px] text-[#94A3B8]">保底利率</p></div>
+          <div class="mt-2 bg-[#94A3B8] text-white text-[10px] rounded-full px-2 py-0.5">演示降</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] text-center opacity-75">
+          <p class="text-[12px] text-[#94A3B8] font-semibold mb-2">未来场景①</p>
+          <p class="text-[#94A3B8] text-[28px] font-black mb-1">3.0%</p><p class="text-[#94A3B8] text-xs">演示利率</p>
+          <div class="bg-[#F8FAFC] rounded-lg p-1.5 mt-2"><p class="text-[#94A3B8] text-xs font-bold">1.5%</p><p class="text-[10px] text-[#CBD5E1]">保底利率</p></div>
+          <div class="mt-2 bg-[#CBD5E1] text-white text-[10px] rounded-full px-2 py-0.5">双降</div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] text-center opacity-50">
+          <p class="text-[12px] text-[#CBD5E1] font-semibold mb-2">未来场景②</p>
+          <p class="text-[#CBD5E1] text-[28px] font-black mb-1">2.5%</p><p class="text-[#CBD5E1] text-xs">演示利率</p>
+          <div class="bg-[#F8FAFC] rounded-lg p-1.5 mt-2"><p class="text-[#CBD5E1] text-xs font-bold">1.25%</p><p class="text-[10px] text-[#E2E8F0]">保底利率</p></div>
+          <div class="mt-2 bg-[#E2E8F0] text-[#94A3B8] text-[10px] rounded-full px-2 py-0.5">双降到底</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-5 max-w-[1150px] mx-auto mb-4">
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-3">
+          <div class="w-[40px] h-[40px] bg-[#C9A84C] rounded-lg flex items-center justify-center text-white font-black text-lg flex-shrink-0">1</div>
+          <div><h3 class="text-[16px] font-bold text-[#1B3A5C] mb-1">更高演示基数</h3><p class="text-[#64748B] text-sm">3.9% vs 3.5%，同样的保费对应更高的演示收益</p></div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-3">
+          <div class="w-[40px] h-[40px] bg-[#1B3A5C] rounded-lg flex items-center justify-center text-white font-black text-lg flex-shrink-0">2</div>
+          <div><h3 class="text-[16px] font-bold text-[#1B3A5C] mb-1">更高保底标准</h3><p class="text-[#64748B] text-sm">1.75%，未来可能下调到1.5%甚至1.25%</p></div>
+        </div>
+      </div>
+      <div class="bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl max-w-[1150px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center">不是"以后买不到了"。是<strong class="text-[#1B3A5C]">"同样的钱，630前买到的是双重确定性标准"</strong>。</p>
+        <p class="text-[#94A3B8] text-xs text-center mt-1">注：演示利率≠实际收益，以上仅为不同演示基数与保底标准的对比。实际分红取决于保险公司投资表现。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(16, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">制度在变，资金在动</h1>
+        <p class="text-blue-200 text-base">两条线并进，630不是孤立事件</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1150px] mx-auto">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-[36px] h-[36px] bg-[#EF4444] rounded-lg flex items-center justify-center text-white font-black">收</div>
+            <h3 class="text-[20px] font-bold text-[#1B3A5C]">制度在收紧</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#1B3A5C] rounded-full mt-2"></div><div><p class="text-[#1E293B] font-semibold">预定利率动态调整机制已启动</p><p class="text-[#64748B] text-sm">与市场利率挂钩，自动触发下调</p></div></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#C9A84C] rounded-full mt-2"></div><div><p class="text-[#1E293B] font-semibold">保底利率下行路径清晰</p><p class="text-[#64748B] text-sm">1.75% → 1.5% → 1.25%，趋势明确</p></div></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#EF4444] rounded-full mt-2"></div><div><p class="text-[#1E293B] font-semibold">锁定窗口在关闭</p><p class="text-[#64748B] text-sm">630是当前保底+演示双重标准的最后窗口</p></div></div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-[36px] h-[36px] bg-[#10B981] rounded-lg flex items-center justify-center text-white font-black">移</div>
+            <h3 class="text-[20px] font-bold text-[#1B3A5C]">资金在迁移</h3>
+          </div>
+          <div class="text-center mb-4"><span class="text-[#2563EB] text-[42px] font-black">75万亿</span><p class="text-[#64748B] text-sm">定期存款到期，需要"新家"</p></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-[#FEF2F2] p-3 rounded-lg text-center"><p class="text-[#EF4444] font-semibold text-sm">房产</p><p class="text-[#94A3B8] text-xs">预期弱</p></div>
+            <div class="bg-[#FEF2F2] p-3 rounded-lg text-center"><p class="text-[#EF4444] font-semibold text-sm">股市</p><p class="text-[#94A3B8] text-xs">波动大</p></div>
+          </div>
+          <div class="mt-3 bg-[#ECFDF5] p-3 rounded-lg text-center border border-[#10B981]">
+            <p class="text-[#059669] text-sm font-semibold">分红险："下有保底 + 上有浮动"</p><p class="text-[#94A3B8] text-xs">最合适的承接容器</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(17, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630买的不是产品，是"确定性"的入场券</h1>
+        <p class="text-blue-200 text-base">功能 → 结构 → 时代，三层价值逐层上升</p>
+      </div>
+      <div class="grid grid-cols-3 gap-4 max-w-[1200px] mx-auto">
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#3B82F6]">
+          <div class="text-center mb-3"><span class="text-[#3B82F6] text-[40px] font-black">1</span></div>
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] text-center mb-3">功能性价值</h3>
+          <p class="text-[#64748B] text-sm mb-2">面向<strong>所有客户</strong></p>
+          <div class="bg-[#F0F9FF] p-3 rounded-lg mb-2"><p class="text-[#0C4A6E] text-sm"><strong>跨周期管理</strong>：分红特储机制 = 免费跨周期资产管理服务</p></div>
+          <div class="bg-[#F0F9FF] p-3 rounded-lg"><p class="text-[#0C4A6E] text-sm"><strong>再投资风险</strong>：长期锁定，告别"到期再投利率腰斩"</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#C9A84C]">
+          <div class="text-center mb-3"><span class="text-[#C9A84C] text-[40px] font-black">2</span></div>
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] text-center mb-3">结构性价值</h3>
+          <p class="text-[#64748B] text-sm mb-2">面向<strong>有投资能力的客户</strong></p>
+          <div class="bg-[#FFFBEB] p-3 rounded-lg mb-2"><p class="text-[#92400E] text-sm"><strong>确定性底仓 = 冒险前提</strong></p></div>
+          <div class="bg-[#FFFBEB] p-3 rounded-lg"><p class="text-[#92400E] text-sm"><strong>逻辑倒过来讲</strong>：不是"收益低所以保守"，是"够确定所以敢冒险"</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#8B5CF6]">
+          <div class="text-center mb-3"><span class="text-[#8B5CF6] text-[40px] font-black">3</span></div>
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] text-center mb-3">时代性价值</h3>
+          <p class="text-[#64748B] text-sm mb-2">面向<strong>高认知客户</strong></p>
+          <div class="bg-[#F5F3FF] p-2 rounded-lg mb-1.5"><p class="text-[#5B21B6] text-xs"><strong>确定性溢价</strong>：免费→付费→昂贵</p></div>
+          <div class="bg-[#F5F3FF] p-2 rounded-lg mb-1.5"><p class="text-[#5B21B6] text-xs"><strong>利率期权</strong>：保底终身不变</p></div>
+          <div class="bg-[#F5F3FF] p-2 rounded-lg"><p class="text-[#5B21B6] text-xs"><strong>未来分化</strong>：有底仓 vs 无底仓</p></div>
+        </div>
+      </div>
+      <div class="mt-5 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl max-w-[1200px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center"><strong class="text-[#1B3A5C]">有确定性的人，才敢真正冒险。没有底仓的激进，叫赌博。</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(18, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630前，你的现有能力还有效率</h1>
+        <p class="text-blue-200 text-base">三个条件还在，现在是最容易拿到结果的窗口</p>
+      </div>
+      <div class="max-w-[1000px] mx-auto space-y-4 mb-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[48px] h-[48px] bg-[#10B981] rounded-lg flex items-center justify-center text-white font-black text-xl flex-shrink-0">1</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C] mb-1">客户惯性还在</h3><p class="text-[#64748B] text-sm">客户对"高收益"还有记忆，3.9%还能引起反应</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[48px] h-[48px] bg-[#C9A84C] rounded-lg flex items-center justify-center text-white font-black text-xl flex-shrink-0">2</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C] mb-1">差异化空间还在</h3><p class="text-[#64748B] text-sm">630前还有3.9% vs 3.5%的数字差异，"比收益"还有素材</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[48px] h-[48px] bg-[#3B82F6] rounded-lg flex items-center justify-center text-white font-black text-xl flex-shrink-0">3</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C] mb-1">紧迫感天然存在</h3><p class="text-[#64748B] text-sm">630是真实的截止时间，不用制造焦虑</p></div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C]/10 to-[#C9A84C]/10 border-l-4 border-[#1B3A5C] p-4 rounded-r-xl max-w-[1000px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center">630前是现有销售方式<strong class="text-[#1B3A5C]">最容易拿到结果的窗口</strong>。这个窗口要抓住。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(19, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630后，同样的努力，结果会差很多</h1>
+        <p class="text-blue-200 text-base">三个条件同时消失，旧卖法效率明显下降</p>
+      </div>
+      <div class="max-w-[1000px] mx-auto space-y-4 mb-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[48px] h-[48px] bg-[#EF4444] rounded-lg flex items-center justify-center text-white font-black text-xl flex-shrink-0">1</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C] mb-1">演示利率统一3.5%</h3><p class="text-[#64748B] text-sm">"比收益"没有素材了，所有产品一样</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[48px] h-[48px] bg-[#F59E0B] rounded-lg flex items-center justify-center text-white font-black text-xl flex-shrink-0">2</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C] mb-1">客户认知升级</h3><p class="text-[#64748B] text-sm">客户会越来越问"规则能撑多久"，而不是"收益多少"</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[48px] h-[48px] bg-[#DC2626] rounded-lg flex items-center justify-center text-white font-black text-xl flex-shrink-0">3</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C] mb-1">监管收紧</h3><p class="text-[#64748B] text-sm">炒停售、比收益、制造焦虑 = 踩红线</p></div>
+        </div>
+      </div>
+      <div class="bg-[#FEF2F2] border-l-4 border-[#EF4444] p-4 rounded-r-xl max-w-[1000px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center">630后旧卖法的效率会<strong class="text-[#DC2626]">明显下降</strong>。不是不能用了，是<strong class="text-[#1B3A5C]">性价比在变低</strong>。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(20, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">未来，专业度是核心竞争力</h1>
+        <p class="text-blue-200 text-base">四层穿透能力：从产品功能到认知引导</p>
+      </div>
+      <div class="max-w-[1100px] mx-auto space-y-3 mb-4">
+        <div class="grid grid-cols-4 gap-4">
+          <div class="bg-gradient-to-b from-[#94A3B8] to-[#CBD5E1] p-4 rounded-xl text-center">
+            <p class="text-[10px] text-white font-semibold mb-1">层级4</p><p class="text-white font-bold text-sm">产品功能</p>
+            <div class="mt-2 bg-white/30 rounded-lg p-2"><p class="text-xs text-white">"保底1.75%演示3.9%"</p></div>
+            <div class="mt-1 text-[10px] text-white/70">630前够用</div>
+          </div>
+          <div class="bg-gradient-to-b from-[#64748B] to-[#94A3B8] p-4 rounded-xl text-center">
+            <p class="text-[10px] text-white font-semibold mb-1">层级3</p><p class="text-white font-bold text-sm">需求挖掘</p>
+            <div class="mt-2 bg-white/30 rounded-lg p-2"><p class="text-xs text-white">客户要收益还是安全感？</p></div>
+            <div class="mt-1 text-[10px] text-white/70">区分需求</div>
+          </div>
+          <div class="bg-gradient-to-b from-[#475569] to-[#64748B] p-4 rounded-xl text-center">
+            <p class="text-[10px] text-white font-semibold mb-1">层级2</p><p class="text-white font-bold text-sm">痛点诊断</p>
+            <div class="mt-2 bg-white/30 rounded-lg p-2"><p class="text-xs text-white">焦虑贬值/规则/冒险？</p></div>
+            <div class="mt-1 text-[10px] text-white/70">诊断根源</div>
+          </div>
+          <div class="bg-gradient-to-b from-[#1B3A5C] to-[#2D5A8E] p-4 rounded-xl text-center ring-2 ring-[#C9A84C]">
+            <p class="text-[10px] text-[#C9A84C] font-semibold mb-1">层级1</p><p class="text-white font-bold text-sm">认知引导</p>
+            <div class="mt-2 bg-white/20 rounded-lg p-2"><p class="text-xs text-white">收益思维→确定性思维</p></div>
+            <div class="mt-1 text-[10px] text-[#C9A84C]">630后吃香 ↑</div>
+          </div>
+        </div>
+      </div>
+      <div class="max-w-[1100px] mx-auto bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="border-b-2 border-[#1B3A5C]"><th class="text-left p-2 text-[#1B3A5C]">能力层级</th><th class="text-left p-2 text-[#94A3B8]">630前够用</th><th class="text-left p-2 text-[#1B3A5C]">630后吃香</th></tr></thead>
+            <tbody>
+              <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-semibold text-[#1B3A5C]">产品功能</td><td class="p-2 text-[#64748B] text-sm">能讲"保底1.75%，演示3.9%"</td><td class="p-2 text-[#1E293B] text-sm">能解释为什么是这个数字，背后机制是什么</td></tr>
+              <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-semibold text-[#1B3A5C]">需求挖掘</td><td class="p-2 text-[#64748B] text-sm">客户问啥答啥</td><td class="p-2 text-[#1E293B] text-sm">能区分收益、确定性还是冒险的底气</td></tr>
+              <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-semibold text-[#1B3A5C]">痛点诊断</td><td class="p-2 text-[#64748B] text-sm">不问</td><td class="p-2 text-[#1E293B] text-sm">能诊断贬值、规则看不懂还是不敢冒险</td></tr>
+              <tr><td class="p-2 font-semibold text-[#1B3A5C]">认知引导</td><td class="p-2 text-[#64748B] text-sm">不管</td><td class="p-2 text-[#1E293B] text-sm">帮客户从"收益思维"切换到"确定性思维"</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mt-4 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-3 rounded-r-xl max-w-[1100px] mx-auto">
+        <p class="text-[#1E293B] text-sm text-center">客户买的从来不是产品，是"痛点被解决后的确定感"。<strong>产品只是载体，认知才是交易。</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(21, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630前抓窗口，630后拼专业</h1>
+        <p class="text-blue-200 text-base">务实行动框架：现在 + 未来，两条腿走路</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1200px] mx-auto">
+        <div class="bg-gradient-to-b from-[#C9A84C]/10 to-white p-5 rounded-xl shadow-lg border-2 border-[#C9A84C]">
+          <h3 class="text-[22px] font-bold text-[#1B3A5C] mb-4 text-center">现在的行动</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#C9A84C] rounded-full mt-2 flex-shrink-0"></div><p class="text-[#1E293B]">用你现有的方式，<strong class="text-[#1B3A5C]">抓住630窗口</strong></p></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#C9A84C] rounded-full mt-2 flex-shrink-0"></div><p class="text-[#1E293B]">把今天的宏观逻辑、制度传导、客户认知，<strong class="text-[#1B3A5C]">变成你能讲出来的话</strong></p></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#C9A84C] rounded-full mt-2 flex-shrink-0"></div><p class="text-[#1E293B]">不需要全套换新，先加一层<strong class="text-[#1B3A5C]">"为什么现在该买"</strong>的洞察</p></div>
+          </div>
+        </div>
+        <div class="bg-gradient-to-b from-[#1B3A5C]/10 to-white p-5 rounded-xl shadow-lg border-2 border-[#1B3A5C]">
+          <h3 class="text-[22px] font-bold text-[#1B3A5C] mb-4 text-center">未来的积累</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#1B3A5C] rounded-full mt-2 flex-shrink-0"></div><p class="text-[#1E293B]">每一次跟客户聊，都<strong class="text-[#1B3A5C]">多问一层</strong>"你真正担心的是什么"</p></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#1B3A5C] rounded-full mt-2 flex-shrink-0"></div><p class="text-[#1E293B]">从"讲产品"慢慢过渡到<strong class="text-[#1B3A5C]">"帮客户看懂规则"</strong></p></div>
+            <div class="flex items-start gap-3"><div class="w-2 h-2 bg-[#1B3A5C] rounded-full mt-2 flex-shrink-0"></div><p class="text-[#1E293B]">专业度不是一天建成的，是<strong class="text-[#1B3A5C]">每次对话积累出来的</strong></p></div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl max-w-[1200px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center"><strong class="text-[#1B3A5C]">630前是更容易拿到结果的窗口，630后是更拼专业的赛道。未来的竞争力，来自你今天开始积累的专业度。</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(22, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="text-center mb-6">
+        <p class="text-[#94A3B8] text-lg mb-2">第一部分</p>
+        <h1 class="text-[40px] font-black text-[#1B3A5C]">小结</h1>
+        <div class="w-[80px] h-1 bg-[#C9A84C] mx-auto mt-3"></div>
+      </div>
+      <div class="max-w-[1100px] mx-auto space-y-3 mb-6">
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="w-[56px] h-[56px] bg-[#1B3A5C] rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">模块一</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C]">宏观背景</h3><p class="text-[#64748B] text-sm">利率下行不可逆，确定性标签全面脱落</p></div>
+          <div class="ml-auto text-[#94A3B8] text-xs">12min</div>
+        </div>
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="w-[56px] h-[56px] bg-[#2D5A8E] rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">模块二</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C]">制度层</h3><p class="text-[#64748B] text-sm">630是预定利率联动下调的最后期限</p></div>
+          <div class="ml-auto text-[#94A3B8] text-xs">10min</div>
+        </div>
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="w-[56px] h-[56px] bg-[#3B82F6] rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">模块三</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C]">产品趋势</h3><p class="text-[#64748B] text-sm">低保底+浮动是大方向</p></div>
+          <div class="ml-auto text-[#94A3B8] text-xs">8min</div>
+        </div>
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="w-[56px] h-[56px] bg-[#C9A84C] rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">模块四</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C]">客户价值</h3><p class="text-[#64748B] text-sm">630前买的是"锁定权"</p></div>
+          <div class="ml-auto text-[#94A3B8] text-xs">10min</div>
+        </div>
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="w-[56px] h-[56px] bg-[#8B5CF6] rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">模块五</div>
+          <div><h3 class="text-[18px] font-bold text-[#1B3A5C]">销售视角</h3><p class="text-[#64748B] text-sm">窗口要抓住，专业度要积累</p></div>
+          <div class="ml-auto text-[#94A3B8] text-xs">7min</div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-5 rounded-xl max-w-[1100px] mx-auto text-center">
+        <p class="text-white text-xl font-bold">客户买的不是产品，是你对未来的判断。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(23, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="absolute top-0 left-0 w-2 h-full bg-[#C9A84C]"></div>
+    <div class="h-full flex items-center pl-[120px]">
+      <div>
+        <p class="text-[#94A3B8] text-xl mb-4 tracking-widest">PART 2</p>
+        <h1 class="text-[56px] font-black text-[#1B3A5C] leading-tight mb-4">专业需要被看见</h1>
+        <p class="text-[28px] text-[#475569] mb-8">专业度如果不被看见，等于没有。</p>
+        <div class="flex gap-4">
+          <div class="bg-white px-5 py-2 rounded-lg shadow border border-[#E2E8F0]"><span class="text-[#64748B] text-sm">模块一：为什么需要被看见</span></div>
+          <div class="bg-white px-5 py-2 rounded-lg shadow border border-[#E2E8F0]"><span class="text-[#64748B] text-sm">模块二：7个选题展示</span></div>
+          <div class="bg-white px-5 py-2 rounded-lg shadow border border-[#E2E8F0]"><span class="text-[#64748B] text-sm">模块三：获客新基建</span></div>
+          <div class="bg-white px-5 py-2 rounded-lg shadow border border-[#E2E8F0]"><span class="text-[#64748B] text-sm">模块四：闭环成交</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(24, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="h-full flex items-center justify-center">
+      <div class="text-center">
+        <div class="inline-block bg-[#1B3A5C] text-white text-sm px-4 py-1 rounded-full mb-6">第二部分</div>
+        <h1 class="text-[56px] font-black text-[#1B3A5C] mb-4">你专业了，客户知道吗？</h1>
+        <p class="text-[24px] text-[#475569]">专业需要被看见</p>
+        <div class="mt-12">
+          <div class="w-[120px] h-[120px] border-4 border-[#C9A84C] rounded-full flex items-center justify-center mx-auto">
+            <span class="text-[#C9A84C] text-[60px] font-black">?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(25, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">客户找你的方式，已经变了</h1>
+        <p class="text-blue-200 text-base">三个现实，改变你的客户获取认知</p>
+      </div>
+      <div class="max-w-[1100px] mx-auto space-y-5 mb-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border-l-4 border-[#3B82F6] flex items-start gap-4">
+          <div class="w-[56px] h-[56px] bg-[#EFF6FF] rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="text-[#3B82F6] text-[28px]">🔍</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-1">客户先搜后问</h3>
+            <p class="text-[#64748B]">想了解保险的客户，先刷视频/搜公众号，再问人。你没内容，连被问的机会都没有。</p>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-l-4 border-[#C9A84C] flex items-start gap-4">
+          <div class="w-[56px] h-[56px] bg-[#FFFBEB] rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="text-[#C9A84C] text-[28px]">🤝</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-1">信任前置</h3>
+            <p class="text-[#64748B]">客户加微信之前，已经通过你的内容判断了你专不专业。</p>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-l-4 border-[#8B5CF6] flex items-start gap-4">
+          <div class="w-[56px] h-[56px] bg-[#F5F3FF] rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="text-[#8B5CF6] text-[28px]">💡</span>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-1">沉默区占领</h3>
+            <p class="text-[#64748B]">客户不主动问的时候，你的内容在替他思考。</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-5 rounded-xl max-w-[1100px] mx-auto text-center">
+        <p class="text-white text-xl font-bold">专业不是考了多少证，是客户能不能在需要时想到你。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(26, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">专业展示 ≠ 做自媒体</h1>
+        <p class="text-blue-200 text-base">不是平台，是客户能不能感知到你想得比别人深一层</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1200px] mx-auto">
+        <div class="bg-gradient-to-b from-[#EFF6FF] to-white p-5 rounded-xl shadow-lg border border-[#BFDBFE]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4 text-center">630是现成的专业弹药</h3>
+          <div class="space-y-2">
+            <div class="bg-white p-3 rounded-lg shadow-sm"><span class="text-[#1B3A5C] font-semibold text-sm">宏观</span><span class="text-[#64748B] text-sm"> — 11个确定性标签脱落</span></div>
+            <div class="bg-white p-3 rounded-lg shadow-sm"><span class="text-[#1B3A5C] font-semibold text-sm">制度</span><span class="text-[#64748B] text-sm"> — 630是怎么来的</span></div>
+            <div class="bg-white p-3 rounded-lg shadow-sm"><span class="text-[#1B3A5C] font-semibold text-sm">产品</span><span class="text-[#64748B] text-sm"> — 低保底+浮动趋势</span></div>
+            <div class="bg-white p-3 rounded-lg shadow-sm"><span class="text-[#1B3A5C] font-semibold text-sm">价值</span><span class="text-[#64748B] text-sm"> — 功能→结构→时代三层</span></div>
+            <div class="bg-white p-3 rounded-lg shadow-sm"><span class="text-[#1B3A5C] font-semibold text-sm">销售</span><span class="text-[#64748B] text-sm"> — 窗口要抓住，专业要积累</span></div>
+          </div>
+          <p class="text-[#94A3B8] text-xs text-center mt-3">不是让你去编，是把你听懂的东西用自己的话讲出去</p>
+        </div>
+        <div class="bg-gradient-to-b from-[#FFFBEB] to-white p-5 rounded-xl shadow-lg border border-[#FCD34D]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4 text-center">被看见不只有短视频</h3>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm"><div class="w-[40px] h-[40px] bg-[#DBEAFE] rounded-lg flex items-center justify-center text-[#3B82F6] font-bold text-sm">朋友</div><div><p class="text-[#1E293B] font-semibold text-sm">朋友圈</p><p class="text-[#94A3B8] text-xs">展示观点</p></div></div>
+            <div class="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm"><div class="w-[40px] h-[40px] bg-[#D1FAE5] rounded-lg flex items-center justify-center text-[#10B981] font-bold text-sm">公众</div><div><p class="text-[#1E293B] font-semibold text-sm">公众号</p><p class="text-[#94A3B8] text-xs">展示深度</p></div></div>
+            <div class="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm"><div class="w-[40px] h-[40px] bg-[#FEE2E2] rounded-lg flex items-center justify-center text-[#EF4444] font-bold text-sm">沙龙</div><div><p class="text-[#1E293B] font-semibold text-sm">线下沙龙</p><p class="text-[#94A3B8] text-xs">展示互动</p></div></div>
+            <div class="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm"><div class="w-[40px] h-[40px] bg-[#EDE9FE] rounded-lg flex items-center justify-center text-[#8B5CF6] font-bold text-sm">视频</div><div><p class="text-[#1E293B] font-semibold text-sm">短视频</p><p class="text-[#94A3B8] text-xs">展示表达</p></div></div>
+            <div class="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm"><div class="w-[40px] h-[40px] bg-[#FEF3C7] rounded-lg flex items-center justify-center text-[#D97706] font-bold text-sm">直播</div><div><p class="text-[#1E293B] font-semibold text-sm">直播</p><p class="text-[#94A3B8] text-xs">展示实时专业</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(27, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">7个选题，从今天的内容直接来</h1>
+        <p class="text-blue-200 text-base">每个选题从630切入，展示的是专业洞察，不是产品推销</p>
+      </div>
+      <div class="max-w-[1200px] mx-auto">
+        <div class="grid grid-cols-7 gap-2 mb-5">
+          <div class="bg-gradient-to-b from-[#1B3A5C] to-[#2D5A8E] p-3 rounded-xl text-center text-white shadow-lg">
+            <p class="text-[28px] font-black">1</p><p class="text-sm font-semibold">利率下行</p><p class="text-[10px] text-blue-200 mt-1">你懂经济规律</p>
+          </div>
+          <div class="bg-gradient-to-b from-[#2D5A8E] to-[#3B82F6] p-3 rounded-xl text-center text-white shadow-lg">
+            <p class="text-[28px] font-black">2</p><p class="text-sm font-semibold">资产配置</p><p class="text-[10px] text-blue-100 mt-1">你不只卖保险</p>
+          </div>
+          <div class="bg-gradient-to-b from-[#3B82F6] to-[#60A5FA] p-3 rounded-xl text-center text-white shadow-lg">
+            <p class="text-[28px] font-black">3</p><p class="text-sm font-semibold">长期主义</p><p class="text-[10px] text-blue-50 mt-1">你懂时间价值</p>
+          </div>
+          <div class="bg-gradient-to-b from-[#C9A84C] to-[#F5D97A] p-3 rounded-xl text-center text-[#1B3A5C] shadow-lg">
+            <p class="text-[28px] font-black">4</p><p class="text-sm font-semibold">时代变局</p><p class="text-[10px] opacity-70 mt-1">你有宏观视角</p>
+          </div>
+          <div class="bg-gradient-to-b from-[#8B5CF6] to-[#A78BFA] p-3 rounded-xl text-center text-white shadow-lg">
+            <p class="text-[28px] font-black">5</p><p class="text-sm font-semibold">现金流</p><p class="text-[10px] text-purple-100 mt-1">你懂底层需求</p>
+          </div>
+          <div class="bg-gradient-to-b from-[#EC4899] to-[#F472B6] p-3 rounded-xl text-center text-white shadow-lg">
+            <p class="text-[28px] font-black">6</p><p class="text-sm font-semibold">产品演变</p><p class="text-[10px] text-pink-100 mt-1">你懂行业趋势</p>
+          </div>
+          <div class="bg-gradient-to-b from-[#EF4444] to-[#F87171] p-3 rounded-xl text-center text-white shadow-lg">
+            <p class="text-[28px] font-black">7</p><p class="text-sm font-semibold">确定性定价</p><p class="text-[10px] text-red-100 mt-1">你懂客户心理</p>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b-2 border-[#1B3A5C]"><th class="text-left p-2 text-[#1B3A5C] text-xs">#</th><th class="text-left p-2 text-[#1B3A5C]">选题</th><th class="text-left p-2 text-[#1B3A5C]">展示的专业度</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C]">1</td><td class="p-2 text-[#1E293B] font-semibold">利率下行不可逆</td><td class="p-2 text-[#64748B]">你懂经济规律</td></tr>
+                <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C]">2</td><td class="p-2 text-[#1E293B] font-semibold">资产配置逻辑</td><td class="p-2 text-[#64748B]">你不只卖保险</td></tr>
+                <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C]">3</td><td class="p-2 text-[#1E293B] font-semibold">长期主义</td><td class="p-2 text-[#64748B]">你懂时间价值</td></tr>
+                <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C]">4</td><td class="p-2 text-[#1E293B] font-semibold">时代变局</td><td class="p-2 text-[#64748B]">你有宏观视角</td></tr>
+                <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C]">5</td><td class="p-2 text-[#1E293B] font-semibold">现金流与财富安全</td><td class="p-2 text-[#64748B]">你懂底层需求</td></tr>
+                <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C]">6</td><td class="p-2 text-[#1E293B] font-semibold">保险产品演变</td><td class="p-2 text-[#64748B]">你懂行业趋势</td></tr>
+                <tr><td class="p-2 font-bold text-[#1B3A5C]">7</td><td class="p-2 text-[#1E293B] font-semibold">确定性定价</td><td class="p-2 text-[#64748B]">你懂客户心理</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-3 rounded-r-xl max-w-[1200px] mx-auto">
+        <p class="text-[#1E293B] text-sm text-center">每个选题不是在"讲产品"，是在展示<strong class="text-[#1B3A5C]">"我比别的销售多想了一层"</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(28, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">选题1-2：你懂经济规律</h1>
+        <p class="text-blue-200 text-base">普适性强，面向所有客户</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1200px] mx-auto">
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#3B82F6]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[32px] h-[32px] bg-[#3B82F6] rounded-lg flex items-center justify-center text-white font-black text-sm">1</div><h3 class="text-[20px] font-bold text-[#1B3A5C]">利率下行不可逆</h3></div>
+          <div class="bg-[#F0F9FF] p-3 rounded-lg mb-3"><p class="text-[#0C4A6E] text-sm"><strong>切入：</strong>"630演示利率从3.9%降到3.5%，但这不是终点。"</p></div>
+          <div class="bg-[#F8FAFC] p-3 rounded-lg mb-3"><p class="text-[#64748B] text-sm"><strong>展开：</strong>日本用了30年走到0利率，欧洲从正利率到负利率用了十几年。中国还在下行通道里。</p></div>
+          <div class="bg-[#DBEAFE] p-3 rounded-lg"><p class="text-[#1D4ED8] text-sm font-semibold">展示的专业度：你不只懂保险，你懂宏观经济趋势。</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#C9A84C]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[32px] h-[32px] bg-[#C9A84C] rounded-lg flex items-center justify-center text-white font-black text-sm">2</div><h3 class="text-[20px] font-bold text-[#1B3A5C]">资产配置逻辑</h3></div>
+          <div class="bg-[#FFFBEB] p-3 rounded-lg mb-3"><p class="text-[#92400E] text-sm"><strong>切入：</strong>"630不是保险一家的事，是你整个钱袋子的事。"</p></div>
+          <div class="bg-[#F8FAFC] p-3 rounded-lg mb-3"><p class="text-[#64748B] text-sm"><strong>展开：</strong>存款+理财+保险，不是三个篮子，是三辆车的速度不一样。存款越来越慢，理财有波动，保险是锁定了一个速度。</p></div>
+          <div class="bg-[#FEF3C7] p-3 rounded-lg"><p class="text-[#92400E] text-sm font-semibold">展示的专业度：你在帮客户做整体配置，不是只推销保险。</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(29, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">选题3-5：你懂时间和时代</h1>
+        <p class="text-blue-200 text-base">偏"观念型"，适合有思考习惯的客户</p>
+      </div>
+      <div class="grid grid-cols-3 gap-4 max-w-[1200px] mx-auto">
+        <div class="bg-white p-4 rounded-xl shadow-lg border-t-4 border-[#8B5CF6]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[28px] h-[28px] bg-[#8B5CF6] rounded-lg flex items-center justify-center text-white font-black text-xs">3</div><h3 class="text-[17px] font-bold text-[#1B3A5C]">长期主义</h3></div>
+          <div class="bg-[#F5F3FF] p-2 rounded-lg mb-2"><p class="text-[#5B21B6] text-xs"><strong>切入：</strong>"630前锁定，锁的是什么？是时间。"</p></div>
+          <div class="bg-[#F8FAFC] p-2 rounded-lg mb-2"><p class="text-[#64748B] text-xs"><strong>展开：</strong>利率越低，时间越值钱。同样100万，3%和2%的差距，30年后差出一套房。</p></div>
+          <div class="bg-[#EDE9FE] p-2 rounded-lg"><p class="text-[#6D28D9] text-xs font-semibold">展示：你懂复利，懂时间价值。</p></div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border-t-4 border-[#EC4899]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[28px] h-[28px] bg-[#EC4899] rounded-lg flex items-center justify-center text-white font-black text-xs">4</div><h3 class="text-[17px] font-bold text-[#1B3A5C]">时代变局</h3></div>
+          <div class="bg-[#FDF2F8] p-2 rounded-lg mb-2"><p class="text-[#9D174D] text-xs"><strong>切入：</strong>"以前买房是存钱，现在买房是花钱。"</p></div>
+          <div class="bg-[#F8FAFC] p-2 rounded-lg mb-2"><p class="text-[#64748B] text-xs"><strong>展开：</strong>房产从"资产"变"消耗品"，存款从"保值"变"贬值"，保险从"可选"变"必选项"。</p></div>
+          <div class="bg-[#FCE7F3] p-2 rounded-lg"><p class="text-[#BE185D] text-xs font-semibold">展示：你有宏观视角，能帮客户看懂大势。</p></div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-lg border-t-4 border-[#10B981]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[28px] h-[28px] bg-[#10B981] rounded-lg flex items-center justify-center text-white font-black text-xs">5</div><h3 class="text-[17px] font-bold text-[#1B3A5C]">现金流与财富安全</h3></div>
+          <div class="bg-[#ECFDF5] p-2 rounded-lg mb-2"><p class="text-[#064E3B] text-xs"><strong>切入：</strong>"不是有多少钱，是钱能流多久。"</p></div>
+          <div class="bg-[#F8FAFC] p-2 rounded-lg mb-2"><p class="text-[#64748B] text-xs"><strong>展开：</strong>630前锁定的分红险，给的是持续的现金流。不是一次性的大数字。</p></div>
+          <div class="bg-[#D1FAE5] p-2 rounded-lg"><p class="text-[#047857] text-xs font-semibold">展示：你懂底层需求——客户要的不是数字，是安全感。</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(30, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">选题6-7：你懂行业和客户</h1>
+        <p class="text-blue-200 text-base">保险销售的专业区，最容易建立信任</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1200px] mx-auto mb-4">
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#EF4444]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[32px] h-[32px] bg-[#EF4444] rounded-lg flex items-center justify-center text-white font-black text-sm">6</div><h3 class="text-[20px] font-bold text-[#1B3A5C]">保险产品演变</h3></div>
+          <div class="bg-[#FEF2F2] p-3 rounded-lg mb-3"><p class="text-[#991B1B] text-sm"><strong>切入：</strong>"以前演示4.5%，现在3.5%，以后可能更低——不是产品变差了，是规则变真了。"</p></div>
+          <div class="bg-[#F8FAFC] p-3 rounded-lg mb-3"><p class="text-[#64748B] text-sm"><strong>展开：</strong>从"高保证时代"到"低保底+浮动时代"，保险产品越来越市场化。630前还能锁定相对高的保底和演示。</p></div>
+          <div class="bg-[#FEE2E2] p-3 rounded-lg"><p class="text-[#DC2626] text-sm font-semibold">展示的专业度：你懂行业趋势，不是只懂某款产品。</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#1B3A5C]">
+          <div class="flex items-center gap-2 mb-3"><div class="w-[32px] h-[32px] bg-[#1B3A5C] rounded-lg flex items-center justify-center text-white font-black text-sm">7</div><h3 class="text-[20px] font-bold text-[#1B3A5C]">确定性定价</h3></div>
+          <div class="bg-[#EFF6FF] p-3 rounded-lg mb-3"><p class="text-[#1E40AF] text-sm"><strong>切入：</strong>"以前客户问'收益多少'，现在问'规则能撑多久'。"</p></div>
+          <div class="bg-[#F8FAFC] p-3 rounded-lg mb-3"><p class="text-[#64748B] text-sm"><strong>展开：</strong>客户从"要比谁高"变成"要比谁稳"。630前买的人和630后买的人，面对的不是同一个"确定性标准"。</p></div>
+          <div class="bg-[#DBEAFE] p-3 rounded-lg"><p class="text-[#1D4ED8] text-sm font-semibold">展示的专业度：你懂客户心理，能跟上客户的认知升级。</p></div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-4 rounded-xl max-w-[1200px] mx-auto text-center">
+        <p class="text-white text-lg font-bold">所有选题的核心不是"讲产品"，是展示"<span class="text-[#C9A84C]">我比别的销售多想了一层</span>"。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(31, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">客户找你的方式，已经变了</h1>
+        <p class="text-blue-200 text-base">自媒体不是"要不要做"，是客户"怎么找到你"</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1100px] mx-auto mb-5">
+        <div class="bg-[#F1F5F9] p-5 rounded-xl border border-[#CBD5E1]">
+          <h3 class="text-[20px] font-bold text-[#94A3B8] mb-4 text-center">过去</h3>
+          <div class="space-y-3">
+            <div class="bg-white p-3 rounded-lg"><p class="text-[#64748B]">朋友介绍 → 见面聊聊</p></div>
+            <div class="bg-white p-3 rounded-lg"><p class="text-[#64748B]">靠人脉资源</p></div>
+            <div class="bg-white p-3 rounded-lg"><p class="text-[#64748B]">被动等转介绍</p></div>
+          </div>
+        </div>
+        <div class="bg-gradient-to-b from-[#EFF6FF] to-white p-5 rounded-xl shadow-lg border-2 border-[#3B82F6]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4 text-center">现在</h3>
+          <div class="space-y-3">
+            <div class="bg-white p-3 rounded-lg shadow-sm border border-[#BFDBFE]"><p class="text-[#1E293B]">刷到内容 → 觉得专业 → 加微信</p></div>
+            <div class="bg-white p-3 rounded-lg shadow-sm border border-[#BFDBFE]"><p class="text-[#1E293B]">靠内容获客</p></div>
+            <div class="bg-white p-3 rounded-lg shadow-sm border border-[#BFDBFE]"><p class="text-[#1E293B]">主动被搜索、被推荐</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-5 rounded-xl max-w-[1100px] mx-auto text-center">
+        <p class="text-white text-lg">自媒体（短视频、直播、朋友圈、公众号）不是你"要不要做"的选择题，是客户"怎么找到你"的<strong class="text-[#C9A84C]">必答题</strong>。你不出现，客户就去找出现了的人。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(32, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">追求爆款？你可能在割自己韭菜</h1>
+        <p class="text-blue-200 text-base">爆款是概率事件，专业是复利事件</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1100px] mx-auto mb-5">
+        <div class="bg-[#FEF2F2] p-5 rounded-xl shadow-lg border-2 border-[#EF4444]">
+          <h3 class="text-[22px] font-black text-[#DC2626] mb-4 text-center">追求爆款</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2"><span class="text-[#EF4444] font-bold text-lg">×</span><p class="text-[#991B1B] text-sm">研究算法、蹭热点、博眼球</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#EF4444] font-bold text-lg">×</span><p class="text-[#991B1B] text-sm">流量来了，留不下</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#EF4444] font-bold text-lg">×</span><p class="text-[#991B1B] text-sm">一条爆了，下条不知道发啥</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#EF4444] font-bold text-lg">×</span><p class="text-[#991B1B] text-sm">做给平台看</p></div>
+          </div>
+        </div>
+        <div class="bg-[#ECFDF5] p-5 rounded-xl shadow-lg border-2 border-[#10B981]">
+          <h3 class="text-[22px] font-black text-[#059669] mb-4 text-center">打造专业</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2"><span class="text-[#10B981] font-bold text-lg">✓</span><p class="text-[#064E3B] text-sm">研究客户、挖痛点、给洞察</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#10B981] font-bold text-lg">✓</span><p class="text-[#064E3B] text-sm">精准客户来了，转化高</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#10B981] font-bold text-lg">✓</span><p class="text-[#064E3B] text-sm">体系化内容，持续复利</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#10B981] font-bold text-lg">✓</span><p class="text-[#064E3B] text-sm">做给客户看</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl max-w-[1100px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center">做自媒体不是为了当网红，是为了让精准客户在需要时找到你。<strong class="text-[#1B3A5C]">爆款是概率事件，专业是复利事件。</strong></p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(33, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">每一条内容，都在回答一个问题</h1>
+        <p class="text-blue-200 text-base">"我为什么选你，而不是别的销售？"</p>
+      </div>
+      <div class="max-w-[1100px] mx-auto space-y-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-3 text-center">内容营销的本质</h3>
+          <p class="text-[#1E293B] text-lg text-center">客户不会因为一条内容就下单</p>
+          <p class="text-[#C9A84C] text-lg font-bold text-center mb-2">但会因为一条内容觉得你"和其他销售不一样"</p>
+          <p class="text-[#64748B] text-sm text-center">每一条内容，都在回答一个潜在问题——"我为什么选你，而不是别的销售？"</p>
+        </div>
+        <div class="bg-gradient-to-r from-[#1B3A5C]/5 to-[#C9A84C]/5 p-5 rounded-xl border border-[#C9A84C]">
+          <h3 class="text-[20px] font-bold text-[#1B3A5C] mb-4 text-center">定位公式</h3>
+          <div class="flex items-center justify-center gap-3 mb-4">
+            <div class="bg-[#1B3A5C] text-white px-6 py-3 rounded-xl font-bold text-lg">你是谁</div>
+            <span class="text-[#C9A84C] text-2xl font-black">+</span>
+            <div class="bg-[#2D5A8E] text-white px-6 py-3 rounded-xl font-bold text-lg">你帮谁</div>
+            <span class="text-[#C9A84C] text-2xl font-black">+</span>
+            <div class="bg-[#3B82F6] text-white px-6 py-3 rounded-xl font-bold text-lg">解决什么问题</div>
+          </div>
+          <div class="bg-white p-4 rounded-lg border border-[#E2E8F0]">
+            <p class="text-[#64748B] text-sm mb-1">示例：</p>
+            <p class="text-[#1B3A5C] text-lg font-bold">"我不是卖保险的，我是帮中产家庭在利率下行周期里，锁定确定性底仓的顾问。"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(34, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-3">
+        <h1 class="text-[36px] font-bold text-white mb-1">不要只看播放量</h1>
+        <p class="text-blue-200 text-base">100个精准客户，比10000个路人更有价值</p>
+      </div>
+      <div class="grid grid-cols-2 gap-5 max-w-[1250px] mx-auto">
+        <div>
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] mb-3 text-center">关键数据指标</h3>
+          <div class="bg-white p-3 rounded-xl shadow-lg border border-[#E2E8F0]">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead><tr class="border-b-2 border-[#1B3A5C]"><th class="text-left p-2 text-[#1B3A5C] text-xs">指标</th><th class="text-left p-2 text-[#1B3A5C] text-xs">适用渠道</th><th class="text-left p-2 text-[#1B3A5C] text-xs">为什么重要</th></tr></thead>
+                <tbody>
+                  <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C] text-xs">完播率</td><td class="p-2 text-[#64748B] text-xs">短视频</td><td class="p-2 text-[#64748B] text-xs">内容有没有吸引力</td></tr>
+                  <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C] text-xs">转发率</td><td class="p-2 text-[#64748B] text-xs">朋友圈/公众号</td><td class="p-2 text-[#64748B] text-xs">客户愿不愿用你的内容替他说话</td></tr>
+                  <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C] text-xs">互动率</td><td class="p-2 text-[#64748B] text-xs">全渠道</td><td class="p-2 text-[#64748B] text-xs">有没有引发思考或共鸣</td></tr>
+                  <tr><td class="p-2 font-bold text-[#1B3A5C] text-xs">加微信数</td><td class="p-2 text-[#64748B] text-xs">全渠道</td><td class="p-2 text-[#64748B] text-xs">内容有没有建立信任</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] mb-3 text-center">内容规划节奏</h3>
+          <div class="bg-white p-3 rounded-xl shadow-lg border border-[#E2E8F0]">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead><tr class="border-b-2 border-[#1B3A5C]"><th class="text-left p-2 text-[#1B3A5C] text-xs">类型</th><th class="text-center p-2 text-[#1B3A5C] text-xs">比例</th><th class="text-left p-2 text-[#1B3A5C] text-xs">作用</th></tr></thead>
+                <tbody>
+                  <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C] text-xs">观点型</td><td class="p-2 text-[#3B82F6] font-bold text-center text-xs">60%</td><td class="p-2 text-[#64748B] text-xs">行业洞察、趋势分析</td></tr>
+                  <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C] text-xs">故事型</td><td class="p-2 text-[#10B981] font-bold text-center text-xs">20%</td><td class="p-2 text-[#64748B] text-xs">客户案例、真实对话</td></tr>
+                  <tr class="border-b border-[#E2E8F0]"><td class="p-2 font-bold text-[#1B3A5C] text-xs">互动型</td><td class="p-2 text-[#8B5CF6] font-bold text-center text-xs">10%</td><td class="p-2 text-[#64748B] text-xs">提问、投票、答疑</td></tr>
+                  <tr><td class="p-2 font-bold text-[#1B3A5C] text-xs">个人型</td><td class="p-2 text-[#F59E0B] font-bold text-center text-xs">10%</td><td class="p-2 text-[#64748B] text-xs">工作状态、价值观</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-3 rounded-r-xl max-w-[1250px] mx-auto">
+        <p class="text-[#1E293B] text-sm text-center"><strong class="text-[#1B3A5C]">节奏建议：</strong>每周2-3条，比每天随便发更有质量。重点是<strong>持续出现</strong>，不是哪个平台。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(35, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">你不是一个人摸索</h1>
+        <p class="text-blue-200 text-base">这套方法，是可以被教、被练、被复制的</p>
+      </div>
+      <div class="max-w-[1000px] mx-auto space-y-4 mb-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <h3 class="text-[18px] font-bold text-[#1B3A5C] mb-4 text-center">做自媒体是一门专业学科</h3>
+          <div class="grid grid-cols-5 gap-3">
+            <div class="text-center"><div class="w-[50px] h-[50px] bg-[#1B3A5C] rounded-xl flex items-center justify-center text-white font-bold mx-auto mb-1">定位</div><p class="text-[#94A3B8] text-xs">你是谁<br>你帮谁</p></div>
+            <div class="text-center"><div class="w-[50px] h-[50px] bg-[#2D5A8E] rounded-xl flex items-center justify-center text-white font-bold mx-auto mb-1">选题</div><p class="text-[#94A3B8] text-xs">今天<br>讲什么</p></div>
+            <div class="text-center"><div class="w-[50px] h-[50px] bg-[#3B82F6] rounded-xl flex items-center justify-center text-white font-bold mx-auto mb-1">脚本</div><p class="text-[#94A3B8] text-xs">怎么<br>讲清楚</p></div>
+            <div class="text-center"><div class="w-[50px] h-[50px] bg-[#C9A84C] rounded-xl flex items-center justify-center text-white font-bold mx-auto mb-1">拍摄</div><p class="text-[#94A3B8] text-xs">怎么呈<br>现专业</p></div>
+            <div class="text-center"><div class="w-[50px] h-[50px] bg-[#8B5CF6] rounded-xl flex items-center justify-center text-white font-bold mx-auto mb-1">复盘</div><p class="text-[#94A3B8] text-xs">哪里好<br>哪里改</p></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-5">
+          <div class="bg-gradient-to-b from-[#ECFDF5] to-white p-4 rounded-xl shadow-lg border-2 border-[#10B981]">
+            <h3 class="text-[16px] font-bold text-[#059669] mb-2 text-center">今天的课程给了你</h3>
+            <div class="flex items-start gap-2 mb-1"><span class="text-[#10B981]">✓</span><p class="text-[#1E293B] text-sm">认知（宏观、制度、客户、产品、价值）</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#10B981]">✓</span><p class="text-[#1E293B] text-sm">素材（7个可直接用的选题）</p></div>
+          </div>
+          <div class="bg-gradient-to-b from-[#FFFBEB] to-white p-4 rounded-xl shadow-lg border-2 border-[#C9A84C]">
+            <h3 class="text-[16px] font-bold text-[#C9A84C] mb-2 text-center">下一步</h3>
+            <div class="flex items-start gap-2 mb-1"><span class="text-[#C9A84C]">⏳</span><p class="text-[#1E293B] text-sm">把认知变成内容</p></div>
+            <div class="flex items-start gap-2"><span class="text-[#C9A84C]">⏳</span><p class="text-[#1E293B] text-sm">把内容变成客户</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-5 rounded-xl max-w-[1000px] mx-auto text-center">
+        <p class="text-white text-lg">今天的课程给了你弹药，下一步是<strong class="text-[#C9A84C]">有人带你上战场</strong>。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(36, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">不是做了内容就能卖，是要形成闭环</h1>
+        <p class="text-blue-200 text-base">很多人只做了第一步，后面三步没跟上</p>
+      </div>
+      <div class="max-w-[1000px] mx-auto mb-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0]">
+          <div class="flex items-center justify-center gap-2 mb-5">
+            <div class="bg-[#1B3A5C] text-white px-6 py-4 rounded-xl text-center shadow-lg">
+              <p class="text-[22px] font-black">内容</p><p class="text-xs text-blue-200">被看见</p>
+            </div>
+            <span class="text-[#C9A84C] text-2xl font-black">→</span>
+            <div class="bg-[#2D5A8E] text-white px-6 py-4 rounded-xl text-center shadow-lg">
+              <p class="text-[22px] font-black">互动</p><p class="text-xs text-blue-100">被记住</p>
+            </div>
+            <span class="text-[#C9A84C] text-2xl font-black">→</span>
+            <div class="bg-[#3B82F6] text-white px-6 py-4 rounded-xl text-center shadow-lg">
+              <p class="text-[22px] font-black">咨询</p><p class="text-xs text-blue-50">被信任</p>
+            </div>
+            <span class="text-[#C9A84C] text-2xl font-black">→</span>
+            <div class="bg-gradient-to-b from-[#C9A84C] to-[#F5D97A] text-[#1B3A5C] px-6 py-4 rounded-xl text-center shadow-lg ring-2 ring-[#C9A84C]">
+              <p class="text-[22px] font-black">成交</p><p class="text-xs opacity-70">被选择</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="bg-[#F0F9FF] p-2 rounded-lg text-center"><p class="text-[#1B3A5C] font-bold text-xs">关键动作</p><p class="text-[#64748B] text-xs">持续输出专业观点</p></div>
+            <div class="bg-[#F0F9FF] p-2 rounded-lg text-center"><p class="text-[#1B3A5C] font-bold text-xs">关键动作</p><p class="text-[#64748B] text-xs">回复评论、私聊答疑</p></div>
+            <div class="bg-[#F0F9FF] p-2 rounded-lg text-center"><p class="text-[#1B3A5C] font-bold text-xs">关键动作</p><p class="text-[#64748B] text-xs">一对一深度沟通</p></div>
+            <div class="bg-[#F0F9FF] p-2 rounded-lg text-center"><p class="text-[#1B3A5C] font-bold text-xs">关键动作</p><p class="text-[#64748B] text-xs">提供解决方案</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-[#FEF2F2] border-l-4 border-[#EF4444] p-4 rounded-r-xl max-w-[1000px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center"><strong class="text-[#DC2626]">关键缺失点：</strong>很多人只做了第一步（发内容），后面三步没跟上，所以觉得"做自媒体没用"。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(37, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">630前抢关注，630后占心智</h1>
+        <p class="text-blue-200 text-base">630是事件入口，专业内容的持续输出才是长期引擎</p>
+      </div>
+      <div class="grid grid-cols-2 gap-6 max-w-[1100px] mx-auto mb-5">
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#C9A84C]">
+          <h3 class="text-[22px] font-bold text-[#1B3A5C] mb-4 text-center">630前</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2"><div class="w-2 h-2 bg-[#C9A84C] rounded-full mt-2 flex-shrink-0"></div><div><p class="text-[#1E293B] font-semibold">事件解读、窗口提醒</p><p class="text-[#64748B] text-sm">630演示利率从3.9%→3.5%，确定性标准切换</p></div></div>
+            <div class="bg-[#FFFBEB] p-3 rounded-lg"><p class="text-[#92400E] text-sm"><strong>目标：</strong>吸引关注、建立专业形象</p></div>
+            <div class="bg-[#FEF3C7] p-3 rounded-lg"><p class="text-[#92400E] text-sm"><strong>心态：</strong>"现在有机会"</p></div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-[#1B3A5C]">
+          <h3 class="text-[22px] font-bold text-[#1B3A5C] mb-4 text-center">630后</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2"><div class="w-2 h-2 bg-[#1B3A5C] rounded-full mt-2 flex-shrink-0"></div><div><p class="text-[#1E293B] font-semibold">趋势分析、认知教育</p><p class="text-[#64748B] text-sm">630过去了，但利率下行没有过去</p></div></div>
+            <div class="bg-[#EFF6FF] p-3 rounded-lg"><p class="text-[#1E40AF] text-sm"><strong>目标：</strong>持续占领客户心智、为下一个节点蓄客</p></div>
+            <div class="bg-[#DBEAFE] p-3 rounded-lg"><p class="text-[#1D4ED8] text-sm"><strong>心态：</strong>"长期有价值"</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-[#1B3A5C]/5 border-l-4 border-[#C9A84C] p-4 rounded-r-xl max-w-[1100px] mx-auto">
+        <p class="text-[#1E293B] text-lg text-center">630是事件入口，但<strong class="text-[#1B3A5C]">专业内容的持续输出</strong>，才是长期引擎。630不是终点，是内容营销的起点。</p>
+      </div>
+    </div>
+  </div>
+`);
+window.slideDataMap.set(38, `
+  <div class="w-[1440px] h-[810px] shadow-2xl relative overflow-hidden slide-bg">
+    <div class="w-[1350px] h-[720px] mx-auto my-[20px]">
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl mb-5">
+        <h1 class="text-[36px] font-bold text-white mb-1">今天就能做的三件事</h1>
+        <p class="text-blue-200 text-base">不用等，现在开始</p>
+      </div>
+      <div class="max-w-[1000px] mx-auto space-y-4 mb-6">
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[56px] h-[56px] bg-[#1B3A5C] rounded-xl flex items-center justify-center text-white font-black text-2xl flex-shrink-0">1</div>
+          <div><h3 class="text-[20px] font-bold text-[#1B3A5C] mb-1">选1个选题，写一段</h3><p class="text-[#64748B] text-sm">从今天的7个选题里选一个，用你自己的话写一段（发朋友圈也行）。不用完美，先发出去。</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[56px] h-[56px] bg-[#3B82F6] rounded-xl flex items-center justify-center text-white font-black text-2xl flex-shrink-0">2</div>
+          <div><h3 class="text-[20px] font-bold text-[#1B3A5C] mb-1">本周发1条内容，测试反应</h3><p class="text-[#64748B] text-sm">看有没有客户点赞、评论、私信你。有反应 = 方向对；没反应 = 换角度再试。</p></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-lg border border-[#E2E8F0] flex items-start gap-4">
+          <div class="w-[56px] h-[56px] bg-[#C9A84C] rounded-xl flex items-center justify-center text-white font-black text-2xl flex-shrink-0">3</div>
+          <div><h3 class="text-[20px] font-bold text-[#1B3A5C] mb-1">下次对话，多问一层</h3><p class="text-[#64748B] text-sm">客户问"收益多少"时，先反问："您更担心收益，还是担心以后规则变？"这个问题本身，就是专业度的展示。</p></div>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-[#1B3A5C] to-[#2D5A8E] p-6 rounded-xl max-w-[1000px] mx-auto">
+        <p class="text-white text-2xl font-bold text-center mb-3">客户买的不是产品，是你对未来的判断。</p>
+        <p class="text-blue-200 text-center mb-2">当你能用经济规律解释"为什么现在该买"，而不是"为什么这个产品好"——你就完成了从销售到顾问的跨越。</p>
+        <div class="w-[60px] h-0.5 bg-[#C9A84C] mx-auto my-3"></div>
+        <p class="text-[#C9A84C] text-xl font-bold text-center">630不是一次停售事件，是一个时代的切换信号。</p>
+        <p class="text-white text-lg text-center mt-3">你专业了，客户会看见的。</p>
+      </div>
+    </div>
+  </div>
+`);
+
+class PPTController {
+    constructor() {
+        this.currentIndex = 0;
+        this.slides = [];
+        this.totalSlides = 0;
+        this.viewport = document.getElementById('ppt-viewport');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.progressBarFill = document.getElementById('progressBarFill');
+        this.pageIndicator = document.getElementById('pageIndicator');
+        this.init();
+    }
+    init() {
+        this.loadSlides();
+        this.bindEvents();
+        this.initializePage();
+        this.updateUI();
+        this.updateViewportScale();
+    }
+    initializePage() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var pageParam = urlParams.get('page');
+        if (!pageParam) { pageParam = '1'; urlParams.set('page', '1'); window.history.replaceState({}, '', window.location.pathname + '?' + urlParams.toString()); }
+        var pageNum = parseInt(pageParam, 10);
+        var targetIndex = pageNum - 1;
+        if (!isNaN(pageNum) && targetIndex >= 0 && targetIndex < this.totalSlides) {
+            if (this.slides[0]) this.slides[0].classList.remove('active');
+            this.currentIndex = targetIndex;
+            if (this.slides[targetIndex]) this.slides[targetIndex].classList.add('active');
+        }
+    }
+    loadSlides() {
+        var pageNumbers = Array.from(window.slideDataMap.keys()).sort(function(a,b){return a-b;});
+        this.totalSlides = pageNumbers.length;
+        var self = this;
+        pageNumbers.forEach(function(pageNum, idx) {
+            var slideDiv = document.createElement('div');
+            slideDiv.className = 'slide';
+            if (idx === 0) slideDiv.classList.add('active');
+            var htmlContent = window.slideDataMap.get(pageNum);
+            var contentEl = document.createElement('div');
+            contentEl.innerHTML = htmlContent.trim();
+            slideDiv.appendChild(contentEl);
+            self.viewport.appendChild(slideDiv);
+            self.slides.push(slideDiv);
+        });
+    }
+    bindEvents() {
+        var self = this;
+        this.prevBtn.addEventListener('click', function(){ self.prevSlide(); });
+        this.nextBtn.addEventListener('click', function(){ self.nextSlide(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') self.prevSlide();
+            else if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); self.nextSlide(); }
+            else if (e.key === 'Home') self.goToSlide(0);
+            else if (e.key === 'End') self.goToSlide(self.totalSlides - 1);
+        });
+        var touchStartX = 0;
+        this.viewport.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; });
+        this.viewport.addEventListener('touchend', function(e){
+            var diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { if (diff > 0) self.nextSlide(); else self.prevSlide(); }
+        });
+        window.addEventListener('resize', function(){ self.updateViewportScale(); });
+    }
+    prevSlide() { if (this.currentIndex > 0) this.goToSlide(this.currentIndex - 1); }
+    nextSlide() { if (this.currentIndex < this.totalSlides - 1) this.goToSlide(this.currentIndex + 1); }
+    goToSlide(index) {
+        if (index < 0 || index >= this.totalSlides) return;
+        this.slides[this.currentIndex].classList.remove('active');
+        this.currentIndex = index;
+        this.slides[this.currentIndex].classList.add('active');
+        var p = new URLSearchParams(window.location.search);
+        p.set('page', (index+1).toString());
+        window.history.replaceState({}, '', window.location.pathname + '?' + p.toString());
+        this.updateUI();
+    }
+    updateUI() {
+        if (this.totalSlides === 0) { this.pageIndicator.textContent = '...'; return; }
+        this.prevBtn.disabled = this.currentIndex === 0;
+        this.nextBtn.disabled = this.currentIndex === this.totalSlides - 1;
+        this.progressBarFill.style.width = ((this.currentIndex + 1) / this.totalSlides * 100) + '%';
+        this.pageIndicator.textContent = (this.currentIndex + 1) + ' / ' + this.totalSlides;
+    }
+    updateViewportScale() {
+        var scale = Math.min((window.innerWidth-40)/1440, (window.innerHeight-40)/810, 1);
+        this.viewport.style.transform = 'scale(' + scale + ')';
+    }
+}
+
+// Init
+new PPTController();
+</script>
+</body>
 </html>
