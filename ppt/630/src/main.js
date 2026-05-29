@@ -1,4 +1,3 @@
-import './styles/main.css'
 import { PPTController } from './js/ppt-controller.js'
 import { RouteHandler } from './js/route-handler.js'
 
