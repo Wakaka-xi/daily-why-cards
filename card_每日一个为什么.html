@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日一个为什么</title>
+  <style>
+    * { margin:0; padding:0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #C8E6C9;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+      min-height: 100vh;
+      min-width: 620px;
+      overflow-x: hidden;
+    }
+
+    .card {
+      width: 540px;
+      min-width: 540px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .top-bar {
+      background: #0B3D0B;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .top-bar .series {
+      font-size: 11px;
+      color: #66BB6A;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .top-bar .issue {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    .hero {
+      background: linear-gradient(160deg, #0B3D0B 0%, #1B5E20 60%, #66BB6A 100%);
+      padding: 36px 32px 32px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: 10px;
+      bottom: -20px;
+      font-size: 160px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      font-style: italic;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #A5D6A7;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #A5D6A7;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-sub::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: #66BB6A;
+      flex-shrink: 0;
+    }
+
+    .discovery {
+      padding: 22px 32px 16px;
+      flex-shrink: 0;
+    }
+    .discovery-label {
+      font-size: 10px;
+      color: #66BB6A;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .discovery-fact {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .fact-num {
+      font-size: 56px;
+      font-weight: 900;
+      color: #0B3D0B;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .fact-num span {
+      font-size: 28px;
+      color: #66BB6A;
+    }
+    .fact-caption {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .fact-caption strong {
+      color: #0B3D0B;
+      font-weight: 600;
+    }
+
+    .divider {
+      margin: 0 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #66BB6A, transparent);
+      flex-shrink: 0;
+    }
+
+    .mechanisms {
+      padding: 16px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .mech-card {
+      background: #E8F5E9;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border-bottom: 2px solid #A5D6A7;
+    }
+    .mech-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .mech-icon { font-size: 18px; }
+    .mech-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0B3D0B;
+    }
+    .mech-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .fun-fact {
+      margin: 0 32px 20px;
+      background: linear-gradient(135deg, #0B3D0B, #1B5E20);
+      border-radius: 12px;
+      padding: 14px 18px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fun-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .fun-content {}
+    .fun-label {
+      font-size: 10px;
+      color: #66BB6A;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .fun-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding: 14px 32px;
+      background: #E8F5E9;
+      border-top: 1px solid #A5D6A7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #66BB6A;
+    }
+    .footer-date {
+      font-size: 12px;
+      color: #888;
+    }
+    .footer-right {
+      font-size: 11px;
+      color: #66BB6A;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="top-bar">
+      <span class="series">每日一个为什么</span>
+      <span class="issue">VOL.021 · 动物行为学</span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-tag">🦥 生态</div>
+      <div class="hero-title">为什么<em>树懒</em>拉屎<br>要冒死爬到地面？</div>
+      <div class="hero-sub">树懒每周只排便一次，且必须冒死爬到地面——这是动物界最反常的生存冒险</div>
+    </div>
+
+    <div class="discovery">
+      <div class="discovery-label">核心发现</div>
+      <div class="discovery-fact">
+        <div class="fact-num">50<span>%</span></div>
+        <div class="fact-caption">超过<strong>50%的树懒死亡</strong><br>发生在地面活动期间</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mechanisms">
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">💩</span><span class="mech-title">粪便占体重33%</span></div>
+        <div class="mech-text">树懒一次排便量能占体重的1/3，从高处坠落会砸出坑，且散落树冠会引来捕食者</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🦋</span><span class="mech-title">树懒蛾共生循环</span></div>
+        <div class="mech-text">树懒蛾只在粪便中产卵，幼虫发育后飞回树懒皮毛，完成三方共生循环</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🌿</span><span class="mech-title">藻类伪装保护色</span></div>
+        <div class="mech-text">树懒蛾的粪便为皮毛上的绿藻提供肥料，绿藻让树懒呈绿色——这正是树冠中的完美伪装</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-top"><span class="mech-icon">🐆</span><span class="mech-title">地面暴露捕食者</span></div>
+        <div class="mech-text">下树过程长达数十分钟，完全暴露在美洲豹、角雕等捕食者面前，慢动作成了致命弱点</div>
+      </div>
+
+    </div>
+
+    <div class="fun-fact">
+      <span class="fun-icon">💡</span>
+      <div class="fun-content">
+        <div class="fun-label">冷知识</div>
+        <div class="fun-text">树懒皮毛里的绿藻，是靠树懒蛾的粪便施肥才长出来的——树懒冒死拉屎，其实是在「种」自己的保护色。</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-dot"></div>
+        <span class="footer-date">2026年5月29日</span>
+      </div>
+      <div class="footer-right">智囊团 & 2号位</div>
+    </div>
+
+  </div>
+</body>
+</html>
